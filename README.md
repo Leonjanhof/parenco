@@ -88,7 +88,7 @@ A tool for calculating how many paper rolls can be packed based on the current p
   4. When user inputs current diameter, calculate remaining meters available
   5. Calculate and display how many rolls can still be packed with the remaining paper
 
-## Getting Started
+## Getting started
 
 ```bash
 # Install dependencies
