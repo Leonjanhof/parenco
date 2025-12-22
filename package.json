@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build": "npm run build --prefix parenco",
+    "build": "npm ci --include=dev --prefix parenco && npm run build --prefix parenco",
     "start": "npm run start --prefix parenco"
   }
 }
