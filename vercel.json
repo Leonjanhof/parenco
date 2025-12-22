@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "buildCommand": "npm ci --include=dev --prefix parenco && npm run build --prefix parenco",
+  "installCommand": "npm ci --include=dev --prefix parenco",
+  "outputDirectory": "parenco/dist",
+  "framework": "vite"
+}
+
