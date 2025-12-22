@@ -1,14 +1,10 @@
 #!/bin/sh
 set -e
 
-cd parenco
+# Install using the lockfile to ensure reproducible builds
+npm ci --prefix parenco
 
-# install deps if node_modules absent (Railway cache will reuse)
-if [ ! -d node_modules ]; then
-  npm install
-fi
-
-# build then serve via preview on provided PORT (falls back to 4173)
-npm run build
-npm run start
+# Build then serve (PORT comes from Railway)
+npm run build --prefix parenco
+npm run start --prefix parenco
 
