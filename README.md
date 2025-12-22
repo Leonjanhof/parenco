@@ -1,6 +1,6 @@
 # Parenco
 
-A mobile-first, responsive web application built with Vite, React, and Tailwind CSS, designed to provide helpful tools for work. Railway ready.
+A mobile-first, responsive web application built with Vite React JS with React compiler, and Tailwind CSS, designed to provide helpful tools for work. Railway ready.
 
 ## Design specifications
 
@@ -13,7 +13,7 @@ A mobile-first, responsive web application built with Vite, React, and Tailwind 
 ## Tech stack
 
 - **Vite** - Build tool
-- **React** - UI framework
+- **React JS** - UI framework with React compiler
 - **Tailwind CSS** - Styling (included by default with Vite + React)
 
 ## Coding standards
