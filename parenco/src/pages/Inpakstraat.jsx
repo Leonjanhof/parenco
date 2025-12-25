@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom'
 function Inpakstraat() {
   const navigate = useNavigate()
   const [diameter, setDiameter] = useState('')
+  const [windsPerRoll, setWindsPerRoll] = useState('1.5')
+  const [reductionFactor, setReductionFactor] = useState('5')
   const [rollsCount, setRollsCount] = useState(0)
-  const percentageChance = 5
 
   const animationStyles = `
     @keyframes unwind-line {
@@ -28,32 +29,54 @@ function Inpakstraat() {
   const ROLL_DIAMETER = 1255
   const MIN_ROLL_DIAMETER = 1180
   const MAX_ROLL_DIAMETER = 1255
-  const WINDS_PER_ROLL = 1.5
-  const BASE_LENGTH = 4283
-  const FULL_DIAMETER = 1200
-  const REDUCTION_FACTOR = 0.95
+  const BASE_CORE_DIAMETER = 185
+  const MEASURED_DIAMETER = 1185
+  const MEASURED_LENGTH = 4248
+  const MAX_DIAMETER = 1200
+  const MIN_DIAMETER = 185
 
   useEffect(() => {
     let calculatedRolls = 0
 
-    if (diameter && diameter >= 230 && diameter <= 1200) {
+    if (diameter && diameter >= MIN_DIAMETER && diameter <= MAX_DIAMETER) {
       const currentDiameter = parseFloat(diameter)
-      if (!isNaN(currentDiameter)) {
-        const areaRatio = Math.pow(currentDiameter / FULL_DIAMETER, 2)
-        const remainingLength = BASE_LENGTH * areaRatio
+      const winds = parseFloat(windsPerRoll) || 1.5
+      const reductionPercent = parseFloat(reductionFactor) || 5
+      if (!isNaN(currentDiameter) && !isNaN(winds) && winds > 0 && !isNaN(reductionPercent)) {
+        // Calculate paper area (excluding the 185mm core)
+        // Paper area = π * (outer_radius^2 - core_radius^2)
+        // Simplified: π * ((diameter^2 - core_diameter^2) / 4)
+        const currentPaperArea = Math.PI * ((currentDiameter * currentDiameter - BASE_CORE_DIAMETER * BASE_CORE_DIAMETER) / 4)
+        const measuredPaperArea = Math.PI * ((MEASURED_DIAMETER * MEASURED_DIAMETER - BASE_CORE_DIAMETER * BASE_CORE_DIAMETER) / 4)
+        
+        // Calculate remaining length based on area ratio
+        const areaRatio = currentPaperArea / measuredPaperArea
+        const remainingLength = MEASURED_LENGTH * areaRatio
 
-        const metersPerRoll = (Math.PI * ROLL_DIAMETER / 1000) * WINDS_PER_ROLL
-        const adjustedMetersPerRoll = metersPerRoll * REDUCTION_FACTOR
+        // Calculate how many rolls can be made
+        const metersPerRoll = (Math.PI * ROLL_DIAMETER / 1000) * winds
+        const reductionFactorValue = 1 - (reductionPercent / 100)
+        const adjustedMetersPerRoll = metersPerRoll * reductionFactorValue
         calculatedRolls = Math.floor(remainingLength / adjustedMetersPerRoll)
       }
     }
 
     setRollsCount(calculatedRolls > 0 ? calculatedRolls : 0)
-  }, [diameter])
+  }, [diameter, windsPerRoll, reductionFactor])
 
   const handleDiameterChange = (e) => {
     const value = e.target.value
     setDiameter(value)
+  }
+
+  const handleWindsPerRollChange = (e) => {
+    const value = e.target.value
+    setWindsPerRoll(value)
+  }
+
+  const handleReductionFactorChange = (e) => {
+    const value = e.target.value
+    setReductionFactor(value)
   }
 
   return (
@@ -100,10 +123,13 @@ function Inpakstraat() {
                   <span className="font-semibold">naam:</span> REELPLEX 220
                 </div>
                 <div>
-                  <span className="font-semibold">diameter:</span> 1200mm
+                  <span className="font-semibold">diameter:</span> 1185mm
                 </div>
                 <div>
-                  <span className="font-semibold">lengte:</span> 4283m
+                  <span className="font-semibold">lengte:</span> 4248m
+                </div>
+                <div>
+                  <span className="font-semibold">kern diameter:</span> 185mm
                 </div>
                 <div>
                   <span className="font-semibold">vgm:</span> 220
@@ -112,19 +138,56 @@ function Inpakstraat() {
             </div>
           </div>
 
-          <div className="mb-6 md:mb-8">
-            <div className="text-xs md:text-sm text-gray-600 mb-2">
-              bereik: 1200mm tot 230mm
+          <div className="mb-6 md:mb-8 space-y-4">
+            <div>
+              <div className="text-xs md:text-sm text-gray-600 mb-2">
+                bereik: {MAX_DIAMETER}mm tot {MIN_DIAMETER}mm (kern: {BASE_CORE_DIAMETER}mm)
+              </div>
+              <input
+                type="number"
+                value={diameter}
+                onChange={handleDiameterChange}
+                placeholder="diameter (mm)"
+                min={MIN_DIAMETER}
+                max={MAX_DIAMETER}
+                className="w-full px-4 py-3 rounded-xl border-2 border-primary-light focus:border-accent-light focus:outline-none text-primary-light placeholder-gray-400 bg-white/60 backdrop-blur-sm text-base md:text-lg"
+              />
             </div>
-            <input
-              type="number"
-              value={diameter}
-              onChange={handleDiameterChange}
-              placeholder="diameter (mm)"
-              min="230"
-              max="1200"
-              className="w-full px-4 py-3 rounded-xl border-2 border-primary-light focus:border-accent-light focus:outline-none text-primary-light placeholder-gray-400 bg-white/60 backdrop-blur-sm text-base md:text-lg"
-            />
+            <div>
+              <div className="text-xs md:text-sm text-gray-600 mb-2">
+                standaard: 1.5 wikkelingen per rol
+              </div>
+              <div className="flex gap-3">
+                <input
+                  type="number"
+                  value={windsPerRoll}
+                  onChange={handleWindsPerRollChange}
+                  placeholder="aantal wikkelingen per rol"
+                  min="0.1"
+                  step="0.1"
+                  className="w-1/2 px-4 py-3 rounded-xl border-2 border-primary-light focus:border-accent-light focus:outline-none text-primary-light placeholder-gray-400 bg-white/60 backdrop-blur-sm text-base md:text-lg"
+                />
+                <div className="w-1/2 relative">
+                  <select
+                    value={reductionFactor}
+                    onChange={handleReductionFactorChange}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-primary-light focus:border-accent-light focus:outline-none text-primary-light bg-white/60 backdrop-blur-sm text-base md:text-lg cursor-pointer appearance-none"
+                    style={{ direction: 'ltr' }}
+                  >
+                    {Array.from({ length: 10 }, (_, i) => i + 1).map((percent) => (
+                      <option key={percent} value={percent}>
+                        {percent}%
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="bg-white/60 backdrop-blur-sm rounded-xl p-6 md:p-8 shadow-lg">
@@ -143,7 +206,7 @@ function Inpakstraat() {
                   het percentage van de kans dat de rollen een diameter van minder dan 1255mm hebben:
                 </div>
                 <div className="text-3xl md:text-5xl font-bold text-primary-light">
-                  {percentageChance}% 
+                  {reductionFactor || '5'}% 
                 </div>
               </div>
             </div>
