@@ -1,0 +1,16 @@
+{
+  "name": "parenco",
+  "private": true,
+  "version": "0.0.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm ci --include=dev --prefix parenco && npm run build --prefix parenco",
+    "start": "serve -s parenco/dist -l tcp://0.0.0.0:${PORT:-4173}",
+    "dev": "npm run dev --prefix parenco"
+  },
+  "dependencies": {
+    "serve": "^14.2.5"
+  }
+}

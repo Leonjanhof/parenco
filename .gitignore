@@ -1,8 +1,6 @@
 # Dependencies
 node_modules/
-package-lock.json
 yarn.lock
-!parenco/package-lock.json
 
 # Environment variables
 .env

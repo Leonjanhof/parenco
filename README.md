@@ -92,16 +92,29 @@ A tool for calculating how many paper rolls can be packed based on the current p
 ## Getting started
 
 ```bash
-# Install dependencies
-npm install
+# From the repo root (or from parenco/)
+npm install --prefix parenco
 
 # Start development server
-npm run dev
+npm run dev --prefix parenco
 
-# Build for production
+# Production build (root script used by Railway)
 npm run build
 ```
 
 ## Deployment
 
-This project is configured to be Railway ready.
+### Vercel
+
+Root `vercel.json` installs and builds the app under `parenco/` and publishes `parenco/dist`.
+
+### Railway (Railpack)
+
+The Vite app lives in `parenco/`, but Railpack detects Node only when a root `package.json` exists. This repo includes:
+
+- Root `package.json` — `build` runs `npm ci --include=dev` + `vite build` in `parenco/`; `start` serves `parenco/dist`
+- Root `railway.toml` — Railpack builder, build/start commands, healthcheck on `/`
+
+`vite` and other build tools stay in `parenco` `devDependencies`; the root build script uses `--include=dev` so production installs still compile. Runtime serving uses `serve` (SPA fallback with `-s`), not `vite preview`.
+
+Optional: set the Railway service root directory to `/parenco` instead; that path also has a working `build`/`start` pair.
