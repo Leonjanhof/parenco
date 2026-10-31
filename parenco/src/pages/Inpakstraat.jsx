@@ -62,7 +62,7 @@ function Inpakstraat() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="font-display text-left text-xl text-primary-deep transition hover:text-primary-light md:text-2xl"
+            className="font-display text-left text-xl text-brand-navy transition hover:text-brand-mid md:text-2xl"
             aria-label="terug naar homepage"
           >
             inpakstraat
@@ -70,7 +70,7 @@ function Inpakstraat() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-primary-soft/70 bg-white/70 text-2xl text-primary-light transition hover:border-accent-light hover:text-primary-deep"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-brand-soft/80 bg-white/80 text-2xl text-brand-mid transition hover:border-brand-bright hover:text-brand-navy"
             aria-label="terug naar homepage"
           >
             ←
@@ -82,37 +82,37 @@ function Inpakstraat() {
         <section className="mb-8 flex flex-col items-center gap-6 md:mb-10 md:flex-row md:justify-center md:gap-10">
           <div className="relative flex h-56 w-full items-center justify-center md:h-64 md:w-64">
             <div className="relative h-48 w-48 animate-unwind-spool md:h-60 md:w-60">
-              <div className="absolute left-1/2 top-1/2 h-2 origin-left -translate-y-1/2 rotate-[-55deg] rounded-full bg-primary-light animate-unwind-line md:h-3" />
-              <div className="absolute inset-0 rounded-full border-8 border-primary-soft/50 animate-unwind-ring" />
-              <div className="absolute inset-3 rounded-full border-8 border-primary-soft/70 animate-unwind-ring" style={{ animationDelay: '0.1s' }} />
-              <div className="absolute inset-6 rounded-full border-8 border-primary-light/55 animate-unwind-ring" style={{ animationDelay: '0.2s' }} />
-              <div className="absolute inset-9 rounded-full border-8 border-primary-light/75 animate-unwind-ring" style={{ animationDelay: '0.3s' }} />
-              <div className="absolute inset-12 rounded-full border-8 border-primary-light" />
-              <div className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 shadow-[0_6px_18px_rgba(46,115,153,0.12)]">
-                <div className="h-7 w-7 rounded-full bg-accent-light" />
+              <div className="absolute left-1/2 top-1/2 h-2 origin-left -translate-y-1/2 rotate-[-55deg] rounded-full bg-brand-bright animate-unwind-line md:h-3" />
+              <div className="absolute inset-0 rounded-full border-8 border-brand-soft/60 animate-unwind-ring" />
+              <div className="absolute inset-3 rounded-full border-8 border-brand-soft/80 animate-unwind-ring" style={{ animationDelay: '0.1s' }} />
+              <div className="absolute inset-6 rounded-full border-8 border-brand-bright/45 animate-unwind-ring" style={{ animationDelay: '0.2s' }} />
+              <div className="absolute inset-9 rounded-full border-8 border-brand-bright/70 animate-unwind-ring" style={{ animationDelay: '0.3s' }} />
+              <div className="absolute inset-12 rounded-full border-8 border-brand-navy/80" />
+              <div className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[0_6px_18px_rgba(0,32,91,0.12)]">
+                <div className="h-7 w-7 rounded-full bg-brand-navy" />
               </div>
             </div>
           </div>
 
-          <dl className="w-full space-y-2.5 text-sm text-primary-light md:w-auto md:min-w-[14rem] md:text-base">
+          <dl className="w-full space-y-2.5 text-sm text-brand-mid md:w-auto md:min-w-[14rem] md:text-base">
             <div className="flex gap-2">
-              <dt className="font-medium text-primary-deep">naam:</dt>
+              <dt className="font-medium text-brand-navy">naam:</dt>
               <dd>reelplex 220</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="font-medium text-primary-deep">diameter:</dt>
+              <dt className="font-medium text-brand-navy">diameter:</dt>
               <dd>1185mm</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="font-medium text-primary-deep">lengte:</dt>
+              <dt className="font-medium text-brand-navy">lengte:</dt>
               <dd>4248m</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="font-medium text-primary-deep">kern diameter:</dt>
+              <dt className="font-medium text-brand-navy">kern diameter:</dt>
               <dd>{BASE_CORE_DIAMETER}mm</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="font-medium text-primary-deep">vgm:</dt>
+              <dt className="font-medium text-brand-navy">vgm:</dt>
               <dd>220</dd>
             </div>
           </dl>
@@ -120,7 +120,7 @@ function Inpakstraat() {
 
         <section className="mb-6 space-y-4 md:mb-8">
           <div>
-            <p className="mb-2 text-xs text-primary-light/75 md:text-sm">
+            <p className="mb-2 text-xs text-brand-mid/80 md:text-sm">
               bereik: {MAX_DIAMETER}mm tot {MIN_DIAMETER}mm (kern: {BASE_CORE_DIAMETER}mm)
             </p>
             <input
@@ -135,7 +135,7 @@ function Inpakstraat() {
           </div>
 
           <div>
-            <p className="mb-2 text-xs text-primary-light/75 md:text-sm">
+            <p className="mb-2 text-xs text-brand-mid/80 md:text-sm">
               standaard: 1.5 wikkelingen per rol
             </p>
             <div className="flex gap-3">
@@ -161,7 +161,7 @@ function Inpakstraat() {
                   ))}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                  <svg className="h-5 w-5 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <svg className="h-5 w-5 text-brand-mid" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
@@ -172,19 +172,19 @@ function Inpakstraat() {
 
         <section className="result-panel space-y-7 md:space-y-8">
           <div>
-            <p className="mb-2 text-sm text-primary-light md:text-base">
+            <p className="mb-2 text-sm text-brand-mid md:text-base">
               aantal rollen die gewikkeld kunnen worden:
             </p>
-            <p className="font-display text-4xl font-bold tracking-tight text-primary-deep md:text-5xl">
+            <p className="font-display text-4xl font-bold tracking-tight text-brand-navy md:text-5xl">
               {rollsCount}
             </p>
           </div>
 
-          <div className="border-t border-primary-soft/50 pt-6 md:pt-8">
-            <p className="mb-2 text-sm text-primary-light md:text-base">
+          <div className="border-t border-brand-soft/60 pt-6 md:pt-8">
+            <p className="mb-2 text-sm text-brand-mid md:text-base">
               het percentage van de kans dat de rollen een diameter van minder dan 1255mm hebben:
             </p>
-            <p className="font-display text-4xl font-bold tracking-tight text-primary-deep md:text-5xl">
+            <p className="font-display text-4xl font-bold tracking-tight text-brand-navy md:text-5xl">
               {reductionFactor || '5'}%
             </p>
           </div>

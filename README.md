@@ -4,11 +4,11 @@ A mobile-first, responsive web application built with Vite React JS with React c
 
 ## Design specifications
 
-- **Theme**: Light theme
-- **Main Text Color**: Light blue
-- **Accent Color**: Yellow (light-ish)
-- **Background Colors**: Gradient of white / grey / warm-ish tones
-- **Approach**: Mobile-first, fully responsive
+- **Theme**: Light theme (Smurfit Westrock house style)
+- **Brand colors**: Navy `#00205B`, bright blue `#08B2FF`, supporting mid blues, white
+- **Accent**: Blue only — no yellow or warm accent colors
+- **Background**: Cool white-to-blue mist gradients
+- **Approach**: Mobile-first, fully responsive, professional and modern
 
 ## Tech stack
 
