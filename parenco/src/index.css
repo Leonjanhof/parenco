@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply min-h-screen bg-gradient-warm font-sans text-primary-light;
+  }
+
+  ::selection {
+    background: rgba(240, 216, 74, 0.45);
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply relative min-h-screen overflow-x-hidden bg-gradient-warm;
+  }
+
+  .page-shell::before {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(rgba(61, 142, 184, 0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), transparent 70%);
+  }
+
+  .site-header {
+    @apply sticky top-0 z-20 border-b border-primary-soft/40 bg-white/70 backdrop-blur-md;
+  }
+
+  .field-input {
+    @apply w-full rounded-2xl border border-primary-soft/80 bg-white/75 px-4 py-3.5 text-base text-primary-deep placeholder:text-primary-light/45 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] outline-none transition focus:border-accent-light focus:bg-white focus:ring-2 focus:ring-accent-soft/70 md:text-lg;
+  }
+
+  .result-panel {
+    @apply rounded-3xl border border-white/70 bg-white/65 p-6 shadow-[0_12px_40px_rgba(46,115,153,0.08)] backdrop-blur-md md:p-8;
+  }
+}

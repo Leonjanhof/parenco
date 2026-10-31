@@ -5,13 +5,8 @@ function Homepage() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
 
-  const scrollbarStyles = `
-    .nav-scroll::-webkit-scrollbar { display: none; }
-    .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-  `
-
   const navItems = [
-    { name: 'inpakstraat', path: '/inpakstraat' }
+    { name: 'inpakstraat', path: '/inpakstraat', note: 'bereken inpakpapier voor rollen' },
   ]
 
   const handleNavigate = (path) => {
@@ -19,50 +14,69 @@ function Homepage() {
     setTimeout(() => {
       navigate(path)
       setLoading(false)
-    }, 1500)
+    }, 1200)
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-warm flex items-center justify-center">
-        <div className="flex flex-col items-center gap-6">
-          <div className="relative">
-            <div className="w-20 h-20 border-4 border-primary-light border-t-transparent rounded-full animate-spin"></div>
-            <div className="absolute inset-0 w-20 h-20 border-4 border-accent-light border-r-transparent rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+      <div className="page-shell flex min-h-screen items-center justify-center px-6">
+        <div className="relative z-10 flex flex-col items-center gap-5 animate-fade-up">
+          <div className="relative h-16 w-16">
+            <div className="absolute inset-0 rounded-full border-[3px] border-primary-soft" />
+            <div className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-primary-light animate-spin-slow" />
+            <div className="absolute inset-2 rounded-full border-[3px] border-transparent border-b-accent-light animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '1.6s' }} />
           </div>
-          <div className="text-3xl text-primary-light font-medium animate-pulse">
+          <p className="font-display text-2xl tracking-tight text-primary-light animate-soft-pulse">
             laden...
-          </div>
+          </p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-warm">
-      <div className="container mx-auto px-4 pt-12 pb-10">
-        <div className="flex items-center justify-center min-h-[70vh]">
-          <nav className="w-full max-w-3xl">
-            <ul className="nav-scroll overflow-visible space-y-5">
-              {navItems.map((item) => (
-                <li key={item.path}>
-                  <button
-                    onClick={() => handleNavigate(item.path)}
-                    style={{ borderWidth: '2mm' }}
-                    className="w-full text-left px-7 py-6 rounded-2xl bg-white/70 hover:bg-white/85 backdrop-blur-md transition-all duration-300 text-primary-light text-2xl font-semibold cursor-pointer transform hover:scale-[1.01] border-accent-light shadow-[0_0_25px_rgba(255,235,59,0.4)] hover:shadow-[0_0_32px_rgba(255,235,59,0.55)]"
-                  >
-                    {item.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
+    <div className="page-shell">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-5 pb-16 pt-10 md:px-8 md:pt-14">
+        <header className="animate-fade-up">
+          <p className="mb-3 font-sans text-sm font-medium tracking-[0.18em] text-primary-light/70">
+            werktools
+          </p>
+          <h1 className="font-display text-[clamp(3.4rem,14vw,6.5rem)] leading-[0.9] tracking-tight text-primary-deep">
+            parenco
+          </h1>
+          <p className="mt-5 max-w-md text-base text-primary-light/85 md:text-lg">
+            praktische hulpmiddelen voor de werkvloer, helder en snel op je telefoon.
+          </p>
+        </header>
+
+        <nav className="mt-14 animate-fade-up md:mt-20" style={{ animationDelay: '120ms' }} aria-label="pagina's">
+          <ul className="space-y-3">
+            {navItems.map((item) => (
+              <li key={item.path}>
+                <button
+                  type="button"
+                  onClick={() => handleNavigate(item.path)}
+                  className="group flex w-full items-center justify-between gap-4 rounded-2xl border border-primary-soft/60 bg-white/55 px-5 py-5 text-left transition duration-300 hover:border-accent-light hover:bg-white/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light md:px-7 md:py-6"
+                >
+                  <span>
+                    <span className="block font-display text-2xl text-primary-deep transition group-hover:text-primary-light md:text-3xl">
+                      {item.name}
+                    </span>
+                    <span className="mt-1 block text-sm text-primary-light/70">
+                      {item.note}
+                    </span>
+                  </span>
+                  <span className="font-display text-2xl text-accent transition group-hover:translate-x-1" aria-hidden="true">
+                    →
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
-      <style>{scrollbarStyles}</style>
     </div>
   )
 }
 
 export default Homepage
-

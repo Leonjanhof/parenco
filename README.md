@@ -48,16 +48,17 @@ A tool for calculating how many paper rolls can be packed based on the current p
   - Centered under the header
   - Visually unwinds animation
 - **Product information** (displayed to the right of the animation):
-  - Name: "REELPLEX 220"
-  - Diameter: "1200mm"
-  - Length: "4283m"
+  - Name: "reelplex 220"
+  - Diameter: "1185mm"
+  - Length: "4248m"
+  - Kern diameter: "230mm"
   - Grammage: "220"
 
 #### Input section
 
 - **Textbox** (rounded corners):
   - For entering the packing paper roll's current diameter
-  - Valid range: 1200mm to 230mm
+  - Valid range: 1200mm to 230mm (kern / floor for the berekening)
   - Range displayed above textbox in small text
 
 #### Output card
@@ -79,14 +80,14 @@ A tool for calculating how many paper rolls can be packed based on the current p
   - Rolls with diameter less than 1180mm will not be packed
 - **Packing details**:
   - Each paper roll gets 1.5 winds of paper
-  - Base length of packing paper roll: 4283 meters (at full diameter of 1200mm)
+  - Measured packing paper roll: 4248 meters at 1185mm diameter
+  - Kern / core diameter used in the area formula: 230mm (realistic floor; below this nothing useful can be packed)
   - Calculation accounts for 5% less use (since some rolls could be smaller than 1255mm)
 - **Calculation process**:
-  1. Calculate meters needed per roll (assuming all rolls are 1255mm diameter)
-  2. Apply 5% reduction factor
-  3. Calculate how many rolls can be packed with a full diameter packing paper roll (1200mm)
-  4. When user inputs current diameter, calculate remaining meters available
-  5. Calculate and display how many rolls can still be packed with the remaining paper
+  1. Calculate remaining paper length from the area ratio vs measured roll, excluding the 230mm kern
+  2. Calculate meters needed per roll (assuming all rolls are 1255mm diameter)
+  3. Apply reduction factor (default 5%)
+  4. When user inputs current diameter (230–1200mm), calculate how many rolls can still be packed
 
 ## Getting started
 
