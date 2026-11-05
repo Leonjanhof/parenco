@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { playPackmanSoundtrack } from './packmanSounds'
+import { shoutPackmanLine, stopPackmanVoice } from './packmanVoice'
 
-const ANIMATION_MS = 20000
+const ANIMATION_MS = 30000
+const CHAT_MS = 1400
 
 const STATUS_TICKER = [
   'rol binnen…',
@@ -10,10 +12,12 @@ const STATUS_TICKER = [
   'opvanger locked',
   'papier wikkelen…',
   'kwaliteit ok ✓',
+  'pack pack mode',
+  'plasje? later!',
   'klaar voor verzenden!',
 ]
 
-/** alternating chat: even = packman, odd = packman junior */
+/** continuous back-and-forth — loops the whole 30s */
 const PACKMAN_CHAT = [
   { who: 'senior', text: 'pack pack!' },
   { who: 'junior', text: 'even een plasje plegen' },
@@ -25,6 +29,22 @@ const PACKMAN_CHAT = [
   { who: 'junior', text: 'pack pack pack!' },
   { who: 'senior', text: 'plasje later, eerst wrap' },
   { who: 'junior', text: 'aye aye packman!' },
+  { who: 'senior', text: 'uitstoter nu!' },
+  { who: 'junior', text: 'ik moet écht even' },
+  { who: 'senior', text: 'nee, eerst packen' },
+  { who: 'junior', text: 'pack pack… en dan plasje' },
+  { who: 'senior', text: 'breedte check!' },
+  { who: 'junior', text: 'oogje op de rol' },
+  { who: 'senior', text: 'go go junior!' },
+  { who: 'junior', text: 'ik ren al!' },
+  { who: 'senior', text: 'opvanger ready?' },
+  { who: 'junior', text: 'locked and loaded' },
+  { who: 'senior', text: 'wikkel die rol!' },
+  { who: 'junior', text: 'papier papier papier!' },
+  { who: 'senior', text: 'pack pack forever' },
+  { who: 'junior', text: 'even een plasje plegen?' },
+  { who: 'senior', text: 'na de confetti!' },
+  { who: 'junior', text: 'deal, pack pack!' },
 ]
 
 function PackmanFigure({ name, variant, bubble, talking }) {
@@ -203,12 +223,12 @@ function AndresPakstraatAnimation({ onComplete }) {
     window.addEventListener('keydown', resume)
 
     const tickers = STATUS_TICKER.map((text, i) =>
-      window.setTimeout(() => setStatus(text), 1200 + i * 2500),
+      window.setTimeout(() => setStatus(text), 1200 + i * 3000),
     )
 
     const chatTimer = window.setInterval(() => {
       setChatIndex((i) => (i + 1) % PACKMAN_CHAT.length)
-    }, 1800)
+    }, CHAT_MS)
 
     const doneTimer = window.setTimeout(() => setPhase('outro'), ANIMATION_MS - 900)
     const hideTimer = window.setTimeout(() => onComplete?.(), ANIMATION_MS)
@@ -220,10 +240,16 @@ function AndresPakstraatAnimation({ onComplete }) {
       tickers.forEach((id) => window.clearTimeout(id))
       window.removeEventListener('pointerdown', resume)
       window.removeEventListener('keydown', resume)
+      stopPackmanVoice()
       stopSound()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const line = PACKMAN_CHAT[chatIndex]
+    shoutPackmanLine(line.text, line.who)
+  }, [chatIndex])
 
   const chatLine = PACKMAN_CHAT[chatIndex]
   const seniorLine = chatLine.who === 'senior' ? chatLine.text : '…'
@@ -251,7 +277,7 @@ function AndresPakstraatAnimation({ onComplete }) {
         <p className="andres-subtitle">meten · doorzetten · inpakken · turbo</p>
         <div className="andres-title-badges">
           <span>packman crew</span>
-          <span>20s show</span>
+          <span>30s show</span>
           <span>papier power</span>
         </div>
       </div>

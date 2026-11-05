@@ -29,7 +29,7 @@
 }
 
 .andres-title--glitch {
-  animation: andres-title-life 20s ease-in-out both, title-glitch 20s linear both;
+  animation: andres-title-life 30s ease-in-out both, title-glitch 30s linear both;
 }
 
 @keyframes title-glitch {
@@ -44,7 +44,7 @@
   justify-content: center;
   gap: 0.4rem;
   margin-top: 0.75rem;
-  animation: badges-in 20s ease-in-out both;
+  animation: badges-in 30s ease-in-out both;
 }
 
 .andres-title-badges span {
@@ -83,7 +83,7 @@
   border-radius: 0 0 8px 8px;
   background: #08B2FF;
   box-shadow: 0 12px 28px rgba(8, 178, 255, 0.45);
-  animation: lamp-blink 20s ease-in-out both;
+  animation: lamp-blink 30s ease-in-out both;
 }
 
 .fx-lamp--1, .fx-lamp--3, .fx-lamp--5 { animation-delay: 0.3s; }
@@ -112,7 +112,7 @@
   border-radius: 50%;
   background: #ffd24a;
   opacity: 0;
-  animation: spark-pop 20s ease-out both;
+  animation: spark-pop 30s ease-out both;
 }
 
 .fx-spark--0 { left: 22%; top: 48%; animation-delay: 5s; }
@@ -155,7 +155,7 @@
   border-radius: 50%;
   background: rgba(184, 230, 255, 0.18);
   filter: blur(4px);
-  animation: steam-rise 20s ease-out both;
+  animation: steam-rise 30s ease-out both;
 }
 
 .fx-steam span:nth-child(1) { left: 0; animation-delay: 12.5s; }
@@ -185,7 +185,7 @@
   width: 8px;
   height: 12px;
   opacity: 0;
-  animation: confetti-fall 20s ease-in both;
+  animation: confetti-fall 30s ease-in both;
 }
 
 .fx-confetti-bit--0 { left: 8%; background: #ffd24a; animation-delay: 17s; }
@@ -230,7 +230,7 @@
   margin: 6px 0;
   background: linear-gradient(90deg, transparent, rgba(8, 178, 255, 0.7), transparent);
   opacity: 0;
-  animation: speed-dash 20s linear both;
+  animation: speed-dash 30s linear both;
 }
 
 .fx-speedlines span:nth-child(1) { width: 80px; animation-delay: 0s; }
@@ -255,7 +255,7 @@
   background: radial-gradient(circle at 40% 35%, #ff8a9a, #c81e45);
   box-shadow: 0 0 0 0 rgba(255, 90, 122, 0.5);
   z-index: 10;
-  animation: siren-spin 20s ease-in-out both;
+  animation: siren-spin 30s ease-in-out both;
 }
 
 @keyframes siren-spin {
@@ -281,7 +281,7 @@
   border-radius: 8px;
   background: rgba(0, 20, 51, 0.65);
   opacity: 0;
-  animation: alert-banner 20s ease-in-out both;
+  animation: alert-banner 30s ease-in-out both;
 }
 
 @keyframes alert-banner {
@@ -303,7 +303,7 @@
   border: 1px solid rgba(8, 178, 255, 0.35);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
   font-family: Figtree, sans-serif;
-  animation: hud-life 20s ease-in-out both;
+  animation: hud-life 30s ease-in-out both;
 }
 
 @keyframes hud-life {
@@ -365,7 +365,7 @@
   border-radius: 999px;
   background: linear-gradient(90deg, #08B2FF, #ffd24a);
   transform-origin: left center;
-  animation: meter-fill 20s ease-in-out both;
+  animation: meter-fill 30s ease-in-out both;
 }
 
 .pak-meter-fill--rpm { animation-name: meter-rpm; }
@@ -404,7 +404,7 @@
   font-family: "Bricolage Grotesque", sans-serif;
   font-size: 1.35rem;
   color: #fff;
-  animation: diameter-tick 20s steps(8) both;
+  animation: diameter-tick 30s steps(8) both;
 }
 
 @keyframes diameter-tick {
@@ -421,7 +421,7 @@
   top: 0;
   height: 40px;
   z-index: 3;
-  animation: crane-life 20s ease-in-out both;
+  animation: crane-life 30s ease-in-out both;
 }
 
 .pak-crane-rail {
@@ -441,7 +441,7 @@
   width: 3px;
   height: 36px;
   background: #B8E6FF;
-  animation: crane-move 20s ease-in-out both;
+  animation: crane-move 30s ease-in-out both;
 }
 
 .pak-crane-hook::after {
@@ -476,7 +476,7 @@
   left: 30%;
   top: 8%;
   z-index: 4;
-  animation: scanner-life 20s ease-in-out both;
+  animation: scanner-life 30s ease-in-out both;
 }
 
 .pak-scanner-beam {
@@ -484,7 +484,7 @@
   height: 90px;
   background: linear-gradient(180deg, rgba(255, 90, 122, 0), #ff5a7a, rgba(255, 90, 122, 0));
   box-shadow: 0 0 12px #ff5a7a;
-  animation: scanner-sweep 20s linear both;
+  animation: scanner-sweep 30s linear both;
 }
 
 .pak-scanner-label {
@@ -535,7 +535,7 @@
   right: 20%;
   height: 8px;
   opacity: 0.55;
-  animation: upper-rail 20s ease-in-out both;
+  animation: upper-rail 30s ease-in-out both;
 }
 
 @keyframes upper-rail {
@@ -551,7 +551,7 @@
   width: 56px;
   height: 56px;
   opacity: 0.7;
-  animation: queue-roll 20s ease-in-out both;
+  animation: queue-roll 30s ease-in-out both;
   z-index: 4;
 }
 
@@ -560,7 +560,7 @@
   bottom: 28%;
   width: 64px;
   height: 64px;
-  animation: done-roll 20s ease-in-out both;
+  animation: done-roll 30s ease-in-out both;
   z-index: 4;
 }
 
@@ -593,7 +593,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   opacity: 0;
-  animation: sticker-slap 20s ease-in-out both;
+  animation: sticker-slap 30s ease-in-out both;
 }
 
 @keyframes sticker-slap {
@@ -610,7 +610,7 @@
   height: 3px;
   background: linear-gradient(90deg, transparent, rgba(8, 178, 255, 0.6));
   opacity: 0;
-  animation: trail-whoosh 20s linear both;
+  animation: trail-whoosh 30s linear both;
 }
 
 @keyframes trail-whoosh {
@@ -629,7 +629,7 @@
   color: #08B2FF;
   text-shadow: 0 0 10px rgba(8, 178, 255, 0.6);
   opacity: 0;
-  animation: digits-pop 20s ease-in-out both;
+  animation: digits-pop 30s ease-in-out both;
   white-space: nowrap;
 }
 
@@ -653,7 +653,7 @@
   border: 2px solid #ffd24a;
   border-radius: 50%;
   opacity: 0;
-  animation: shockwave 20s ease-out both;
+  animation: shockwave 30s ease-out both;
 }
 
 @keyframes shockwave {
@@ -669,7 +669,7 @@
   border-radius: 16px;
   border: 2px solid rgba(8, 178, 255, 0.5);
   opacity: 0;
-  animation: catch-pulse 20s ease-out both;
+  animation: catch-pulse 30s ease-out both;
 }
 
 @keyframes catch-pulse {
@@ -686,7 +686,7 @@
   bottom: 52%;
   width: 36px;
   z-index: 6;
-  animation: stamper-life 20s ease-in-out both;
+  animation: stamper-life 30s ease-in-out both;
 }
 
 .pak-stamper-head {
@@ -696,7 +696,7 @@
   border-radius: 4px 4px 2px 2px;
   background: linear-gradient(180deg, #B8E6FF, #0057A8);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  animation: stamp-down 20s ease-in-out both;
+  animation: stamp-down 30s ease-in-out both;
 }
 
 @keyframes stamper-life {
@@ -725,7 +725,7 @@
   background: rgba(0, 20, 51, 0.7);
   border: 1px solid rgba(184, 230, 255, 0.25);
   z-index: 5;
-  animation: qc-life 20s ease-in-out both;
+  animation: qc-life 30s ease-in-out both;
 }
 
 .pak-qc-light {
@@ -735,9 +735,9 @@
   opacity: 0.3;
 }
 
-.pak-qc-light--red { background: #ff5a7a; animation: qc-red 20s steps(1) both; }
-.pak-qc-light--amber { background: #ffd24a; animation: qc-amber 20s steps(1) both; }
-.pak-qc-light--green { background: #3dff9a; animation: qc-green 20s steps(1) both; }
+.pak-qc-light--red { background: #ff5a7a; animation: qc-red 30s steps(1) both; }
+.pak-qc-light--amber { background: #ffd24a; animation: qc-amber 30s steps(1) both; }
+.pak-qc-light--green { background: #3dff9a; animation: qc-green 30s steps(1) both; }
 
 @keyframes qc-life {
   0%, 20% { opacity: 0; }
@@ -772,7 +772,7 @@
   border: 2px dashed rgba(243, 230, 200, 0.7);
   border-radius: 50%;
   opacity: 0;
-  animation: paper-spiral 20s linear both;
+  animation: paper-spiral 30s linear both;
 }
 
 @keyframes paper-spiral {
@@ -788,7 +788,7 @@
   width: 34px;
   height: 34px;
   z-index: 4;
-  animation: fan-life 20s ease-in-out both;
+  animation: fan-life 30s ease-in-out both;
 }
 
 .pak-fan-blades {
@@ -825,7 +825,7 @@
   color: #ffd24a;
   opacity: 0;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  animation: note-float 20s ease-out both;
+  animation: note-float 30s ease-out both;
 }
 
 .pak-floating-notes span:nth-child(1) { left: 18%; top: 30%; animation-delay: 0s; }
@@ -880,7 +880,7 @@
   display: flex;
   justify-content: space-between;
   pointer-events: none;
-  animation: rod-lights 20s ease-in-out both;
+  animation: rod-lights 30s ease-in-out both;
 }
 
 .andres-curtain-lights i {
@@ -1033,11 +1033,11 @@
 }
 
 .packman--senior {
-  animation: packman-senior-work 20s ease-in-out both, packman-bounce 0.45s ease-in-out infinite;
+  animation: packman-senior-work 30s ease-in-out both, packman-bounce 0.45s ease-in-out infinite;
 }
 
 .packman--junior {
-  animation: packman-junior-work 20s ease-in-out both, packman-bounce 0.4s ease-in-out infinite;
+  animation: packman-junior-work 30s ease-in-out both, packman-bounce 0.4s ease-in-out infinite;
   animation-delay: 0s, 0.12s;
 }
 
@@ -1089,7 +1089,7 @@
   border-radius: 50%;
   background: #f3e6c8;
   box-shadow: 0 0 8px #f3e6c8;
-  animation: power-pulse 0.6s ease-in-out infinite alternate, packman-pellet-eat 20s linear both;
+  animation: power-pulse 0.6s ease-in-out infinite alternate, packman-pellet-eat 30s linear both;
   z-index: 1;
 }
 
@@ -1110,7 +1110,7 @@
   border-radius: 50% 50% 50% 0;
   background: #ff5a7a;
   transform: rotate(-45deg);
-  animation: fruit-pop 20s ease-in-out both;
+  animation: fruit-pop 30s ease-in-out both;
   z-index: 2;
 }
 
@@ -1122,13 +1122,13 @@
 
 .packman-foe--cyan {
   background: linear-gradient(180deg, #5ce1ff, #0891b2) !important;
-  animation: packman-foe-cyan 20s linear both !important;
+  animation: packman-foe-cyan 30s linear both !important;
   box-shadow: 0 0 8px rgba(92, 225, 255, 0.55) !important;
 }
 
 .packman-foe--pink {
   background: linear-gradient(180deg, #ff9ad5, #e11d8f) !important;
-  animation: packman-foe-pink 20s linear both !important;
+  animation: packman-foe-pink 30s linear both !important;
   box-shadow: 0 0 8px rgba(255, 154, 213, 0.55) !important;
 }
 

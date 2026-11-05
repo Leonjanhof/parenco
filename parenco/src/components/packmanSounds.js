@@ -1,6 +1,7 @@
 /**
  * Original packman-style SFX via Web Audio API.
  * Procedural tones only — no copyrighted game samples.
+ * Timeline: 30s (under loud spoken packman dialogue).
  */
 
 function createCtx() {
@@ -48,7 +49,7 @@ function noiseBurst(ctx, { start, dur = 0.08, gain = 0.03 }) {
 }
 
 /**
- * Schedule the full 20s packman soundtrack for andre's pakstraat.
+ * Schedule the full 30s packman soundtrack for andre's pakstraat.
  * Returns a cleanup that stops the context.
  */
 export function playPackmanSoundtrack() {
@@ -88,7 +89,7 @@ function runScore(ctx) {
       type: 'square',
       start: start + 0.15 + i * 0.12,
       dur: 0.14,
-      gain: 0.045,
+      gain: 0.08,
     })
   })
   tone(ctx, {
@@ -98,13 +99,13 @@ function runScore(ctx) {
     type: 'square',
     start: start + 0.7,
     dur: 0.35,
-    gain: 0.05,
+    gain: 0.09,
   })
 
-  // chomp loop while scene runs (~2.5s → 17s)
+  // chomp loop under dialogue (~2.5s → 26s) — quieter so speech stays on top
   let chompT = start + 2.4
   let flip = false
-  while (chompT < start + 17.2) {
+  while (chompT < start + 26) {
     tone(ctx, {
       freq: flip ? 180 : 320,
       endFreq: flip ? 90 : 160,
@@ -112,61 +113,61 @@ function runScore(ctx) {
       type: 'sawtooth',
       start: chompT,
       dur: 0.11,
-      gain: 0.028,
+      gain: 0.035,
     })
     flip = !flip
     chompT += 0.22
   }
 
-  // measure beep (~5–7s)
+  // measure beep
   for (let i = 0; i < 4; i += 1) {
     tone(ctx, {
       freq: 1400,
       type: 'sine',
-      start: start + 5.2 + i * 0.28,
+      start: start + 7.5 + i * 0.28,
       dur: 0.08,
-      gain: 0.035,
+      gain: 0.06,
     })
   }
 
-  // eject / push whoosh (~8.5s)
-  noiseBurst(ctx, { start: start + 8.4, dur: 0.14, gain: 0.045 })
+  // eject / push whoosh
+  noiseBurst(ctx, { start: start + 12.2, dur: 0.14, gain: 0.08 })
   tone(ctx, {
     freq: 220,
     endFreq: 90,
     slide: true,
     type: 'triangle',
-    start: start + 8.45,
+    start: start + 12.25,
     dur: 0.22,
-    gain: 0.04,
+    gain: 0.07,
   })
 
-  // catch blip (~10.5s)
+  // catch blip
   tone(ctx, {
     freq: 660,
     endFreq: 990,
     slide: true,
     type: 'square',
-    start: start + 10.5,
+    start: start + 15.5,
     dur: 0.18,
-    gain: 0.04,
+    gain: 0.07,
   })
 
-  // wrap paper rustle + rising tone (~13–16s)
+  // wrap paper rustle
   for (let i = 0; i < 6; i += 1) {
-    noiseBurst(ctx, { start: start + 13.1 + i * 0.35, dur: 0.1, gain: 0.025 })
+    noiseBurst(ctx, { start: start + 19.5 + i * 0.35, dur: 0.1, gain: 0.04 })
     tone(ctx, {
       freq: 440 + i * 60,
       type: 'triangle',
-      start: start + 13.15 + i * 0.35,
+      start: start + 19.55 + i * 0.35,
       dur: 0.12,
-      gain: 0.03,
+      gain: 0.05,
     })
   }
 
-  // opponent eat cue in mini-game (periodic higher chomps)
+  // opponent eat cue
   let eatT = start + 3.0
-  while (eatT < start + 18) {
+  while (eatT < start + 27) {
     tone(ctx, {
       freq: 520,
       endFreq: 260,
@@ -174,53 +175,53 @@ function runScore(ctx) {
       type: 'square',
       start: eatT,
       dur: 0.09,
-      gain: 0.022,
+      gain: 0.03,
     })
     eatT += 1.35
   }
 
-  // siren / alert warble (~3.5–5s)
+  // siren / alert warble
   for (let i = 0; i < 6; i += 1) {
     tone(ctx, {
       freq: i % 2 === 0 ? 880 : 660,
       type: 'square',
-      start: start + 3.4 + i * 0.16,
+      start: start + 4.2 + i * 0.16,
       dur: 0.12,
-      gain: 0.03,
+      gain: 0.05,
     })
   }
 
-  // stamp hit (~15s)
-  noiseBurst(ctx, { start: start + 15.1, dur: 0.06, gain: 0.05 })
+  // stamp hit
+  noiseBurst(ctx, { start: start + 22.5, dur: 0.06, gain: 0.08 })
   tone(ctx, {
     freq: 180,
     endFreq: 60,
     slide: true,
     type: 'triangle',
-    start: start + 15.12,
+    start: start + 22.52,
     dur: 0.18,
-    gain: 0.045,
+    gain: 0.07,
   })
 
-  // quality OK chime (~16s)
+  // quality OK chime
   ;[523.25, 659.25, 783.99].forEach((freq, i) => {
     tone(ctx, {
       freq,
       type: 'sine',
-      start: start + 16.1 + i * 0.09,
+      start: start + 24.2 + i * 0.09,
       dur: 0.2,
-      gain: 0.04,
+      gain: 0.06,
     })
   })
 
-  // confetti sparkles (~17.2–18s)
+  // confetti sparkles
   for (let i = 0; i < 8; i += 1) {
     tone(ctx, {
       freq: 1200 + i * 90,
       type: 'square',
-      start: start + 17.2 + i * 0.08,
+      start: start + 26.2 + i * 0.08,
       dur: 0.06,
-      gain: 0.02,
+      gain: 0.04,
     })
   }
 
@@ -229,9 +230,9 @@ function runScore(ctx) {
     tone(ctx, {
       freq,
       type: 'square',
-      start: start + 18.2 + i * 0.12,
+      start: start + 27.8 + i * 0.12,
       dur: 0.16,
-      gain: 0.042,
+      gain: 0.08,
     })
   })
 }
