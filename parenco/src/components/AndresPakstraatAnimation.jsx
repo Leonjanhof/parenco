@@ -13,10 +13,26 @@ const STATUS_TICKER = [
   'klaar voor verzenden!',
 ]
 
-function PackmanFigure({ name, variant, bubble }) {
+/** alternating chat: even = packman, odd = packman junior */
+const PACKMAN_CHAT = [
+  { who: 'senior', text: 'pack pack!' },
+  { who: 'junior', text: 'even een plasje plegen' },
+  { who: 'senior', text: 'serieus junior?!' },
+  { who: 'junior', text: 'oké… pack pack!' },
+  { who: 'senior', text: 'meten die handel' },
+  { who: 'junior', text: 'ik vang hem wel' },
+  { who: 'senior', text: 'papier eromheen!' },
+  { who: 'junior', text: 'pack pack pack!' },
+  { who: 'senior', text: 'plasje later, eerst wrap' },
+  { who: 'junior', text: 'aye aye packman!' },
+]
+
+function PackmanFigure({ name, variant, bubble, talking }) {
   return (
     <div className={`packman packman--${variant}`} aria-hidden="true">
-      <div className="packman-bubble">{bubble}</div>
+      <div className={`packman-bubble ${talking ? 'packman-bubble--talking' : 'packman-bubble--idle'}`}>
+        {bubble}
+      </div>
       <div className="packman-hat" />
       <div className="packman-body">
         <div className="packman-eye" />
@@ -165,6 +181,7 @@ function ControlHud({ status }) {
 function AndresPakstraatAnimation({ onComplete }) {
   const [phase, setPhase] = useState('playing')
   const [status, setStatus] = useState(STATUS_TICKER[0])
+  const [chatIndex, setChatIndex] = useState(0)
 
   useEffect(() => {
     let stopSound = () => {}
@@ -189,12 +206,17 @@ function AndresPakstraatAnimation({ onComplete }) {
       window.setTimeout(() => setStatus(text), 1200 + i * 2500),
     )
 
+    const chatTimer = window.setInterval(() => {
+      setChatIndex((i) => (i + 1) % PACKMAN_CHAT.length)
+    }, 1800)
+
     const doneTimer = window.setTimeout(() => setPhase('outro'), ANIMATION_MS - 900)
     const hideTimer = window.setTimeout(() => onComplete?.(), ANIMATION_MS)
 
     return () => {
       window.clearTimeout(doneTimer)
       window.clearTimeout(hideTimer)
+      window.clearInterval(chatTimer)
       tickers.forEach((id) => window.clearTimeout(id))
       window.removeEventListener('pointerdown', resume)
       window.removeEventListener('keydown', resume)
@@ -202,6 +224,12 @@ function AndresPakstraatAnimation({ onComplete }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const chatLine = PACKMAN_CHAT[chatIndex]
+  const seniorLine = chatLine.who === 'senior' ? chatLine.text : '…'
+  const juniorLine = chatLine.who === 'junior' ? chatLine.text : '…'
+  const seniorTalking = chatLine.who === 'senior'
+  const juniorTalking = chatLine.who === 'junior'
 
   return (
     <div
@@ -327,8 +355,18 @@ function AndresPakstraatAnimation({ onComplete }) {
           <div className="pak-fan-blades" />
         </div>
 
-        <PackmanFigure name="packman" variant="senior" bubble="go go!" />
-        <PackmanFigure name="packman junior" variant="junior" bubble="papier!" />
+        <PackmanFigure
+          name="packman"
+          variant="senior"
+          bubble={seniorLine}
+          talking={seniorTalking}
+        />
+        <PackmanFigure
+          name="packman junior"
+          variant="junior"
+          bubble={juniorLine}
+          talking={juniorTalking}
+        />
 
         <div className="andres-path-dots">
           <i /><i /><i /><i /><i /><i /><i /><i />

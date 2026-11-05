@@ -953,19 +953,23 @@
 
 .packman-bubble {
   position: absolute;
-  top: -28px;
+  top: -34px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 3px 7px;
-  border-radius: 8px;
+  max-width: 120px;
+  padding: 5px 8px;
+  border-radius: 10px;
   background: #fff;
   color: #00205B;
-  font-size: 0.55rem;
+  font-size: 0.58rem;
   font-family: Figtree, sans-serif;
-  white-space: nowrap;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
   opacity: 0;
-  animation: bubble-pop 20s ease-in-out both;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .packman-bubble::after {
@@ -979,16 +983,30 @@
   transform: translateX(-50%) rotate(45deg);
 }
 
-.packman--junior .packman-bubble {
-  animation-delay: 1.2s;
+.packman-bubble--talking {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+  animation: bubble-talk 0.45s ease;
 }
 
-@keyframes bubble-pop {
-  0%, 22% { opacity: 0; transform: translateX(-50%) translateY(6px) scale(0.7); }
-  28%, 36% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-  44% { opacity: 0; }
-  55%, 62% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-  70%, 100% { opacity: 0; }
+.packman-bubble--idle {
+  opacity: 0.35;
+  transform: translateX(-50%) translateY(4px) scale(0.92);
+}
+
+.packman--junior .packman-bubble--talking {
+  background: #ffd24a;
+  color: #00205B;
+}
+
+.packman--junior .packman-bubble--talking::after {
+  background: #ffd24a;
+}
+
+@keyframes bubble-talk {
+  0% { transform: translateX(-50%) translateY(8px) scale(0.7); }
+  60% { transform: translateX(-50%) translateY(-2px) scale(1.06); }
+  100% { transform: translateX(-50%) translateY(0) scale(1); }
 }
 
 .packman-tool {
