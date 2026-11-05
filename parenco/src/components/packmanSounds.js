@@ -179,14 +179,59 @@ function runScore(ctx) {
     eatT += 1.35
   }
 
+  // siren / alert warble (~3.5–5s)
+  for (let i = 0; i < 6; i += 1) {
+    tone(ctx, {
+      freq: i % 2 === 0 ? 880 : 660,
+      type: 'square',
+      start: start + 3.4 + i * 0.16,
+      dur: 0.12,
+      gain: 0.03,
+    })
+  }
+
+  // stamp hit (~15s)
+  noiseBurst(ctx, { start: start + 15.1, dur: 0.06, gain: 0.05 })
+  tone(ctx, {
+    freq: 180,
+    endFreq: 60,
+    slide: true,
+    type: 'triangle',
+    start: start + 15.12,
+    dur: 0.18,
+    gain: 0.045,
+  })
+
+  // quality OK chime (~16s)
+  ;[523.25, 659.25, 783.99].forEach((freq, i) => {
+    tone(ctx, {
+      freq,
+      type: 'sine',
+      start: start + 16.1 + i * 0.09,
+      dur: 0.2,
+      gain: 0.04,
+    })
+  })
+
+  // confetti sparkles (~17.2–18s)
+  for (let i = 0; i < 8; i += 1) {
+    tone(ctx, {
+      freq: 1200 + i * 90,
+      type: 'square',
+      start: start + 17.2 + i * 0.08,
+      dur: 0.06,
+      gain: 0.02,
+    })
+  }
+
   // outro fanfare
-  ;[784, 659, 523, 392].forEach((freq, i) => {
+  ;[784, 659, 523, 392, 523].forEach((freq, i) => {
     tone(ctx, {
       freq,
       type: 'square',
-      start: start + 18.2 + i * 0.14,
+      start: start + 18.2 + i * 0.12,
       dur: 0.16,
-      gain: 0.04,
+      gain: 0.042,
     })
   })
 }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AndresPakstraatAnimation from '../components/AndresPakstraatAnimation'
 import '../components/andres-pakstraat.css'
+import '../components/andres-pakstraat-deluxe.css'
 
 const ROLL_DIAMETER = 1255
 const BASE_CORE_DIAMETER = 230
