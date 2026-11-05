@@ -144,77 +144,25 @@ function GiantFootCircus() {
     <div className="foot-circus" aria-hidden="true">
       <div className="foot-circus-stage">
         <div className="foot-circus-ground" />
-        <div className="foot-roll-rig">
-          <div className="giant-foot" aria-label="enorme voet">
-            <svg className="giant-foot-svg" viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
-              {/* lower leg / ankle stump */}
-              <path
-                d="M168 8 C168 8 175 70 178 108 C150 118 142 150 155 168 C170 145 195 138 218 148 C230 120 236 70 238 8 Z"
-                fill="url(#footSkin)"
-                stroke="#8a4f38"
-                strokeWidth="3"
-              />
-              {/* main foot side profile: heel → arch → ball → toes */}
-              <path
-                className="giant-foot-silhouette"
-                d="M78 175
-                   C55 168 42 180 48 198
-                   C55 218 78 228 118 230
-                   C165 232 210 226 268 218
-                   C310 212 348 205 372 198
-                   C392 192 402 178 392 168
-                   C382 156 360 152 338 158
-                   C318 145 295 138 270 142
-                   C245 120 210 112 178 118
-                   C150 124 118 145 95 162
-                   C88 168 82 172 78 175 Z"
-                fill="url(#footSkin)"
-                stroke="#7a4530"
-                strokeWidth="4"
-                strokeLinejoin="round"
-              />
-              {/* sole darker edge */}
-              <path
-                d="M55 198 C70 218 110 228 170 230 C230 232 300 220 370 198"
-                fill="none"
-                stroke="#5a2e1c"
-                strokeWidth="10"
-                strokeLinecap="round"
-                opacity="0.55"
-              />
-              {/* arch shadow */}
-              <ellipse cx="200" cy="188" rx="48" ry="14" fill="rgba(90,40,25,0.28)" />
-              {/* toes as side bumps */}
-              <ellipse cx="340" cy="172" rx="18" ry="14" fill="url(#footSkinHi)" stroke="#8a4f38" strokeWidth="2" />
-              <ellipse cx="358" cy="178" rx="14" ry="11" fill="url(#footSkinHi)" stroke="#8a4f38" strokeWidth="2" />
-              <ellipse cx="372" cy="184" rx="11" ry="9" fill="url(#footSkinHi)" stroke="#8a4f38" strokeWidth="2" />
-              <ellipse cx="384" cy="188" rx="9" ry="7" fill="url(#footSkinHi)" stroke="#8a4f38" strokeWidth="2" />
-              {/* toenails */}
-              <ellipse cx="348" cy="166" rx="7" ry="4" fill="#f6e6d8" opacity="0.85" />
-              <ellipse cx="364" cy="172" rx="5" ry="3" fill="#f6e6d8" opacity="0.85" />
-              <ellipse cx="376" cy="178" rx="4" ry="2.5" fill="#f6e6d8" opacity="0.85" />
-              {/* ankle bone highlight */}
-              <ellipse cx="198" cy="140" rx="14" ry="10" fill="rgba(255,255,255,0.22)" />
-              <defs>
-                <linearGradient id="footSkin" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#f3c2a0" />
-                  <stop offset="45%" stopColor="#e39a72" />
-                  <stop offset="100%" stopColor="#b86a48" />
-                </linearGradient>
-                <linearGradient id="footSkinHi" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#f7d2b6" />
-                  <stop offset="100%" stopColor="#d48962" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          <div className="tiny-ball">
-            <span className="tiny-ball-shine" />
-            <span className="tiny-ball-stripe" />
+        <div className="tiny-ball">
+          <span className="tiny-ball-shine" />
+          <span className="tiny-ball-stripe" />
+        </div>
+        <div className="giant-foot">
+          {/* side-view cartoon foot: heel left → toes right */}
+          <div className="foot-draw">
+            <div className="foot-leg" />
+            <div className="foot-heel" />
+            <div className="foot-arch" />
+            <div className="foot-fore" />
+            <div className="foot-toes">
+              <i /><i /><i /><i /><i />
+            </div>
+            <div className="foot-sole-line" />
           </div>
         </div>
       </div>
-      <p className="foot-circus-caption">enorme voet rolt over het balletje</p>
+      <p className="foot-circus-caption">enorme voet rolt heen en weer</p>
     </div>
   )
 }

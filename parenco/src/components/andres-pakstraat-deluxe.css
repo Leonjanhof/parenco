@@ -1725,7 +1725,7 @@
   }
 }
 
-/* ========== junior easter egg: giant foot rolls on tiny ball ========== */
+/* ========== junior easter egg: clear cartoon foot rolling L↔R on ball ========== */
 
 .foot-circus {
   position: absolute;
@@ -1735,100 +1735,169 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 12%;
+  justify-content: center;
   background:
-    radial-gradient(ellipse 70% 45% at 50% 70%, rgba(249, 115, 22, 0.28), transparent 60%),
-    linear-gradient(180deg, rgba(0, 20, 51, 0.15), rgba(0, 20, 51, 0.55));
-  animation: foot-circus-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+    radial-gradient(ellipse 80% 50% at 50% 65%, rgba(249, 115, 22, 0.3), transparent 58%);
+  animation: foot-circus-in 0.45s ease-out both;
 }
 
 .foot-circus-stage {
   position: relative;
-  width: min(520px, 94vw);
-  height: min(320px, 48vh);
+  width: min(560px, 96vw);
+  height: 240px;
 }
 
 .foot-circus-ground {
   position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 18px;
-  height: 16px;
+  left: 10%;
+  right: 10%;
+  bottom: 22px;
+  height: 18px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.4);
-  filter: blur(5px);
-}
-
-/* ball stays centered; foot pivots on top of it and rolls L↔R */
-.foot-roll-rig {
-  position: absolute;
-  left: 50%;
-  bottom: 28px;
-  width: 0;
-  height: 0;
+  background: rgba(0, 0, 0, 0.45);
+  filter: blur(6px);
 }
 
 .tiny-ball {
   position: absolute;
-  left: -18px;
-  bottom: 0;
-  width: 36px;
-  height: 36px;
+  left: 50%;
+  bottom: 36px;
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
   border-radius: 50%;
+  z-index: 5;
   background:
-    radial-gradient(circle at 30% 26%, #fff 0 10%, #7dd3fc 16%, #08B2FF 40%, #0057A8 70%, #001433 100%);
+    radial-gradient(circle at 30% 26%, #fff 0 12%, #7dd3fc 18%, #08B2FF 42%, #0057A8 72%, #001433 100%);
   box-shadow:
-    0 8px 16px rgba(0, 0, 0, 0.45),
-    0 0 20px rgba(8, 178, 255, 0.6);
-  z-index: 3;
-  animation: tiny-ball-roll 2.2s linear infinite;
+    0 10px 18px rgba(0, 0, 0, 0.5),
+    0 0 22px rgba(8, 178, 255, 0.7);
+  animation: tiny-ball-roll 1.8s linear infinite;
 }
 
 .tiny-ball-shine {
   position: absolute;
   left: 22%;
   top: 16%;
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .tiny-ball-stripe {
   position: absolute;
-  inset: 18% -2%;
-  border-top: 2px solid rgba(255, 255, 255, 0.4);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.28);
+  inset: 16% -2%;
+  border-top: 2px solid rgba(255, 255, 255, 0.45);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: 50%;
 }
 
 .giant-foot {
   position: absolute;
-  left: -150px;
-  bottom: 28px;
-  width: 300px;
-  height: 190px;
-  /* pivot = contact point on the ball (near mid-sole) */
+  left: 50%;
+  bottom: 68px;
+  width: 280px;
+  height: 150px;
+  margin-left: -140px;
+  /* pivot above the ball center */
   transform-origin: 50% 100%;
-  z-index: 4;
-  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
-  animation: foot-roll-horizontal 2.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  z-index: 6;
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.5));
+  animation: foot-roll-horizontal 1.8s ease-in-out infinite;
 }
 
-.giant-foot-svg {
+.foot-draw {
+  position: relative;
   width: 100%;
   height: 100%;
-  display: block;
-  overflow: visible;
 }
 
-.giant-foot-silhouette {
-  filter: drop-shadow(-4px 6px 0 rgba(90, 40, 25, 0.25));
+.foot-leg {
+  position: absolute;
+  left: 38%;
+  top: -8px;
+  width: 48px;
+  height: 70px;
+  border-radius: 22px 22px 10px 10px;
+  background: linear-gradient(180deg, #ffd7b8, #e8a57a 70%, #c97b55);
+  box-shadow: inset -6px 0 10px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+.foot-heel {
+  position: absolute;
+  left: 4%;
+  bottom: 8px;
+  width: 78px;
+  height: 78px;
+  border-radius: 50% 40% 45% 50%;
+  background: linear-gradient(145deg, #ffd0ae, #d98960 55%, #a85d3f);
+  box-shadow: inset -8px -6px 12px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.foot-arch {
+  position: absolute;
+  left: 22%;
+  bottom: 22px;
+  width: 110px;
+  height: 52px;
+  border-radius: 40% 40% 30% 30%;
+  background: linear-gradient(180deg, #f0b890, #c97b55);
+  z-index: 3;
+}
+
+.foot-fore {
+  position: absolute;
+  left: 48%;
+  bottom: 10px;
+  width: 120px;
+  height: 70px;
+  border-radius: 45% 55% 40% 35%;
+  background: linear-gradient(120deg, #ffd0ae, #e39a72 50%, #b86a48);
+  box-shadow: inset -10px -8px 14px rgba(0, 0, 0, 0.18);
+  z-index: 4;
+}
+
+.foot-toes {
+  position: absolute;
+  right: 2%;
+  bottom: 18px;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  z-index: 5;
+}
+
+.foot-toes i {
+  display: block;
+  border-radius: 50% 50% 40% 40%;
+  background: linear-gradient(180deg, #ffe0c8, #d98960);
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(120, 60, 40, 0.25);
+}
+
+.foot-toes i:nth-child(1) { width: 28px; height: 36px; }
+.foot-toes i:nth-child(2) { width: 24px; height: 32px; }
+.foot-toes i:nth-child(3) { width: 22px; height: 28px; }
+.foot-toes i:nth-child(4) { width: 18px; height: 24px; }
+.foot-toes i:nth-child(5) { width: 15px; height: 20px; }
+
+.foot-sole-line {
+  position: absolute;
+  left: 8%;
+  right: 6%;
+  bottom: 4px;
+  height: 10px;
+  border-radius: 40%;
+  background: #5a2e1c;
+  opacity: 0.75;
+  z-index: 1;
 }
 
 .foot-circus-caption {
-  margin: 1rem 0 0;
+  margin: 0.85rem 0 0;
   font-family: "Bricolage Grotesque", sans-serif;
   font-size: clamp(0.95rem, 3.2vw, 1.35rem);
   letter-spacing: 0.04em;
@@ -1838,34 +1907,20 @@
 }
 
 @keyframes foot-circus-in {
-  from { opacity: 0; transform: translateY(24px) scale(0.92); }
+  from { opacity: 0; transform: translateY(20px) scale(0.9); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/*
-  Horizontal roll over the ball:
-  translateX moves the foot L/R while rotate makes it tip over the pivot,
-  so the sole stays planted on the ball and rocks heel↔toes.
-*/
+/* big horizontal travel so the roll is obvious */
 @keyframes foot-roll-horizontal {
-  0% {
-    transform: translateX(-72px) rotate(-28deg);
-  }
-  50% {
-    transform: translateX(72px) rotate(28deg);
-  }
-  100% {
-    transform: translateX(-72px) rotate(-28deg);
-  }
+  0%   { transform: translateX(-110px) rotate(-32deg); }
+  50%  { transform: translateX(110px) rotate(32deg); }
+  100% { transform: translateX(-110px) rotate(-32deg); }
 }
 
 @keyframes tiny-ball-roll {
-  /* counter-rotate with foot travel so it looks like it's rolling under the foot */
-  0% { transform: rotate(0deg) translateY(0); }
-  25% { transform: rotate(90deg) translateY(-1px); }
-  50% { transform: rotate(180deg) translateY(0); }
-  75% { transform: rotate(270deg) translateY(-1px); }
-  100% { transform: rotate(360deg) translateY(0); }
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .andres-stage--foot .packman--junior {
@@ -1879,24 +1934,31 @@
 
 @media (max-width: 640px) {
   .foot-circus-stage {
-    height: min(260px, 46vh);
+    height: 200px;
   }
 
   .giant-foot {
-    left: -115px;
-    width: 230px;
-    height: 145px;
+    width: 220px;
+    height: 120px;
+    margin-left: -110px;
+    bottom: 58px;
   }
 
   .tiny-ball {
-    width: 28px;
-    height: 28px;
-    left: -14px;
+    width: 32px;
+    height: 32px;
+    margin-left: -16px;
+    bottom: 30px;
+  }
+
+  .foot-leg {
+    width: 36px;
+    height: 52px;
   }
 
   @keyframes foot-roll-horizontal {
-    0% { transform: translateX(-48px) rotate(-24deg); }
-    50% { transform: translateX(48px) rotate(24deg); }
-    100% { transform: translateX(-48px) rotate(-24deg); }
+    0%   { transform: translateX(-78px) rotate(-28deg); }
+    50%  { transform: translateX(78px) rotate(28deg); }
+    100% { transform: translateX(-78px) rotate(-28deg); }
   }
 }
