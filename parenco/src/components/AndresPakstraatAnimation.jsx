@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { playPackmanSoundtrack } from './packmanSounds'
-import { shoutPackmanLine, stopPackmanVoice } from './packmanVoice'
+import { playYeetBoom, shoutPackmanLine, stopPackmanVoice } from './packmanVoice'
 
 const ANIMATION_MS = 30000
-const CHAT_MS = 1400
+const CHAT_GAP_MS = 450
 
 const STATUS_TICKER = [
   'rol binnen…',
@@ -13,11 +13,10 @@ const STATUS_TICKER = [
   'papier wikkelen…',
   'kwaliteit ok ✓',
   'pack pack mode',
-  'plasje? later!',
+  'robot alert!',
   'klaar voor verzenden!',
 ]
 
-/** packman complains / calls out — junior always answers */
 const PACKMAN_LINES = [
   'plasje plegen',
   'weer een dag geen rust',
@@ -78,9 +77,35 @@ function nextChatLine(prev) {
   return { who: 'junior', text: pickRandom(JUNIOR_REACTIONS, prev?.text) }
 }
 
-function PackmanFigure({ name, variant, bubble, talking }) {
+function waitForPageReady() {
+  return new Promise((resolve) => {
+    const finish = () => {
+      const fonts = document.fonts?.ready
+      if (fonts) {
+        fonts.then(() => resolve()).catch(() => resolve())
+      } else {
+        resolve()
+      }
+    }
+    if (document.readyState === 'complete') {
+      finish()
+    } else {
+      window.addEventListener('load', finish, { once: true })
+      // fallback if load already fired oddly
+      window.setTimeout(finish, 4000)
+    }
+  })
+}
+
+function PackmanFigure({ name, variant, bubble, talking, onClick, yeeted, clickable }) {
+  const Tag = clickable ? 'button' : 'div'
   return (
-    <div className={`packman packman--${variant}`} aria-hidden="true">
+    <Tag
+      type={clickable ? 'button' : undefined}
+      className={`packman packman--${variant} ${yeeted ? 'packman--yeeted' : ''} ${clickable ? 'packman--clickable' : ''}`}
+      onClick={onClick}
+      aria-label={clickable ? 'klik packman om junior eruit te gooien' : undefined}
+    >
       <div className={`packman-bubble ${talking ? 'packman-bubble--talking' : 'packman-bubble--idle'}`}>
         {bubble}
       </div>
@@ -99,6 +124,29 @@ function PackmanFigure({ name, variant, bubble, talking }) {
       <div className="packman-arm packman-arm--right" />
       <div className="packman-tool" />
       <span className="packman-name">{name}</span>
+      {clickable && <span className="packman-hint">klik mij!</span>}
+    </Tag>
+  )
+}
+
+function FactoryRobot({ variant, mode }) {
+  return (
+    <div className={`pak-robot pak-robot--${variant} pak-robot--${mode}`} aria-hidden="true">
+      <div className="pak-robot-antenna" />
+      <div className="pak-robot-head">
+        <span className="pak-robot-eye" />
+        <span className="pak-robot-eye" />
+      </div>
+      <div className="pak-robot-body">
+        <div className="pak-robot-core" />
+      </div>
+      <div className="pak-robot-arm pak-robot-arm--l" />
+      <div className="pak-robot-arm pak-robot-arm--r" />
+      <div className="pak-robot-legs">
+        <span />
+        <span />
+      </div>
+      <span className="pak-robot-tag">bot {variant}</span>
     </div>
   )
 }
@@ -230,11 +278,30 @@ function ControlHud({ status }) {
 }
 
 function AndresPakstraatAnimation({ onComplete }) {
+  const [boot, setBoot] = useState(true)
   const [phase, setPhase] = useState('playing')
   const [status, setStatus] = useState(STATUS_TICKER[0])
-  const [chatLine, setChatLine] = useState(() => nextChatLine(null))
+  const [chatLine, setChatLine] = useState(null)
+  const [yeet, setYeet] = useState(false)
+  const [shake, setShake] = useState(false)
+  const chatAlive = useRef(true)
+  const yeetLock = useRef(false)
 
+  // wait until page (+ fonts) fully loaded before starting the show
   useEffect(() => {
+    let cancelled = false
+    waitForPageReady().then(() => {
+      if (!cancelled) setBoot(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  // main show timers — only after boot
+  useEffect(() => {
+    if (boot) return undefined
+
     let stopSound = () => {}
     let started = false
 
@@ -257,17 +324,12 @@ function AndresPakstraatAnimation({ onComplete }) {
       window.setTimeout(() => setStatus(text), 1200 + i * 3000),
     )
 
-    const chatTimer = window.setInterval(() => {
-      setChatLine((prev) => nextChatLine(prev))
-    }, CHAT_MS)
-
     const doneTimer = window.setTimeout(() => setPhase('outro'), ANIMATION_MS - 900)
     const hideTimer = window.setTimeout(() => onComplete?.(), ANIMATION_MS)
 
     return () => {
       window.clearTimeout(doneTimer)
       window.clearTimeout(hideTimer)
-      window.clearInterval(chatTimer)
       tickers.forEach((id) => window.clearTimeout(id))
       window.removeEventListener('pointerdown', resume)
       window.removeEventListener('keydown', resume)
@@ -275,20 +337,70 @@ function AndresPakstraatAnimation({ onComplete }) {
       stopSound()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [boot])
 
+  // sequential chat — never overlap; wait for speech end
   useEffect(() => {
-    shoutPackmanLine(chatLine.text, chatLine.who)
-  }, [chatLine])
+    if (boot || yeet) return undefined
 
-  const seniorLine = chatLine.who === 'senior' ? chatLine.text : '…'
-  const juniorLine = chatLine.who === 'junior' ? chatLine.text : '…'
-  const seniorTalking = chatLine.who === 'senior'
-  const juniorTalking = chatLine.who === 'junior'
+    chatAlive.current = true
+    let prev = null
+
+    const loop = async () => {
+      while (chatAlive.current) {
+        const line = nextChatLine(prev)
+        prev = line
+        if (!chatAlive.current) break
+        setChatLine(line)
+        await shoutPackmanLine(line.text, line.who)
+        if (!chatAlive.current) break
+        await new Promise((r) => window.setTimeout(r, CHAT_GAP_MS))
+      }
+    }
+
+    loop()
+
+    return () => {
+      chatAlive.current = false
+      stopPackmanVoice()
+    }
+  }, [boot, yeet])
+
+  const handlePackmanClick = () => {
+    if (yeetLock.current || yeet || boot) return
+    yeetLock.current = true
+    chatAlive.current = false
+    stopPackmanVoice()
+    setYeet(true)
+    setShake(true)
+    playYeetBoom()
+    shoutPackmanLine('robot, gooi junior eruit!', 'senior')
+    window.setTimeout(() => setShake(false), 900)
+    window.setTimeout(() => {
+      shoutPackmanLine('aaaaaa ik vlieg!', 'junior')
+    }, 700)
+  }
+
+  if (boot) {
+    return (
+      <div className="andres-stage andres-stage--boot" role="status" aria-label="animatie laden">
+        <div className="andres-boot-panel">
+          <div className="andres-boot-spinner" />
+          <p className="andres-boot-title">andre's pakstraat</p>
+          <p className="andres-boot-sub">laden… even wachten tot alles klaar is</p>
+        </div>
+      </div>
+    )
+  }
+
+  const seniorLine = chatLine?.who === 'senior' ? chatLine.text : (yeet ? 'yeet!' : '…')
+  const juniorLine = chatLine?.who === 'junior' ? chatLine.text : (yeet ? 'aaaa!' : '…')
+  const seniorTalking = chatLine?.who === 'senior' && !yeet
+  const juniorTalking = chatLine?.who === 'junior' && !yeet
 
   return (
     <div
-      className={`andres-stage andres-stage--deluxe ${phase === 'outro' ? 'andres-stage--outro' : ''}`}
+      className={`andres-stage andres-stage--deluxe ${phase === 'outro' ? 'andres-stage--outro' : ''} ${shake ? 'andres-stage--shake' : ''} ${yeet ? 'andres-stage--yeet' : ''}`}
       role="dialog"
       aria-label="andre's pakstraat animatie"
       aria-live="polite"
@@ -296,22 +408,23 @@ function AndresPakstraatAnimation({ onComplete }) {
       <div className="andres-sky andres-sky--deluxe" aria-hidden="true" />
       <div className="andres-floor andres-floor--deluxe" aria-hidden="true" />
       <FactoryExtras />
+      {yeet && <div className="fx-yeet-flash" aria-hidden="true" />}
 
       <PackmanMiniGame />
-      <ControlHud status={status} />
+      <ControlHud status={yeet ? 'junior gelanceerd!' : status} />
 
       <div className="andres-title-wrap">
         <p className="andres-eyebrow">smurfit westrock · parenco</p>
         <h1 className="andres-title andres-title--glitch">andre's pakstraat</h1>
-        <p className="andres-subtitle">meten · doorzetten · inpakken · turbo</p>
+        <p className="andres-subtitle">meten · doorzetten · inpakken · robots</p>
         <div className="andres-title-badges">
           <span>packman crew</span>
           <span>30s show</span>
-          <span>papier power</span>
+          <span>klik packman</span>
         </div>
       </div>
 
-      <div className="andres-scene andres-scene--deluxe" aria-hidden="true">
+      <div className="andres-scene andres-scene--deluxe">
         <div className="pak-crane">
           <div className="pak-crane-rail" />
           <div className="pak-crane-hook" />
@@ -410,17 +523,24 @@ function AndresPakstraatAnimation({ onComplete }) {
           <div className="pak-fan-blades" />
         </div>
 
+        <FactoryRobot variant="alpha" mode={yeet ? 'throw' : 'patrol'} />
+        <FactoryRobot variant="beta" mode={yeet ? 'cheer' : 'patrol'} />
+        <FactoryRobot variant="gamma" mode={yeet ? 'chase' : 'patrol'} />
+
         <PackmanFigure
           name="packman"
           variant="senior"
           bubble={seniorLine}
           talking={seniorTalking}
+          clickable={!yeet}
+          onClick={handlePackmanClick}
         />
         <PackmanFigure
           name="packman junior"
           variant="junior"
           bubble={juniorLine}
           talking={juniorTalking}
+          yeeted={yeet}
         />
 
         <div className="andres-path-dots">
@@ -433,6 +553,12 @@ function AndresPakstraatAnimation({ onComplete }) {
           <span>chomp</span>
           <span>wrap!</span>
         </div>
+
+        {yeet && (
+          <div className="pak-yeet-banner" aria-live="assertive">
+            junior yeet complete
+          </div>
+        )}
       </div>
 
       <div className="andres-progress" aria-hidden="true">

@@ -1,9 +1,10 @@
 /**
- * Loud spoken packman dialogue via Speech Synthesis + attention blast.
- * Always max volume — user asked for full-volume lines.
+ * Loud spoken packman dialogue — one speaker at a time.
+ * shoutPackmanLine returns a Promise that resolves when speech ends.
  */
 
 let sharedAudioCtx = null
+let speakToken = 0
 
 function getAudioCtx() {
   const AC = window.AudioContext || window.webkitAudioContext
@@ -27,13 +28,28 @@ function pickDutchVoice(who) {
   return nl.find((v) => /male|google|xander|robusto/i.test(v.name)) || nl[0]
 }
 
+function waitForVoices() {
+  return new Promise((resolve) => {
+    const existing = window.speechSynthesis?.getVoices?.() || []
+    if (existing.length) {
+      resolve(existing)
+      return
+    }
+    const done = () => {
+      window.speechSynthesis?.removeEventListener('voiceschanged', done)
+      resolve(window.speechSynthesis?.getVoices?.() || [])
+    }
+    window.speechSynthesis?.addEventListener('voiceschanged', done)
+    window.setTimeout(done, 400)
+  })
+}
+
 function attentionBlast(who) {
   const ctx = getAudioCtx()
   if (!ctx) return
   const start = ctx.currentTime
   const base = who === 'junior' ? 560 : 260
 
-  // stacked oscillators = louder presence under speech
   ;[1, 1.5, 2].forEach((mult, i) => {
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
@@ -50,38 +66,100 @@ function attentionBlast(who) {
   })
 }
 
+/** Huge throw / impact SFX when junior gets yeeted */
+export function playYeetBoom() {
+  const ctx = getAudioCtx()
+  if (!ctx) return
+  const start = ctx.currentTime
+
+  const osc = ctx.createOscillator()
+  const gain = ctx.createGain()
+  osc.type = 'sawtooth'
+  osc.frequency.setValueAtTime(120, start)
+  osc.frequency.exponentialRampToValueAtTime(40, start + 0.45)
+  gain.gain.setValueAtTime(0.0001, start)
+  gain.gain.exponentialRampToValueAtTime(0.95, start + 0.02)
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.5)
+  osc.connect(gain)
+  gain.connect(ctx.destination)
+  osc.start(start)
+  osc.stop(start + 0.55)
+
+  const frames = Math.floor(ctx.sampleRate * 0.35)
+  const buffer = ctx.createBuffer(1, frames, ctx.sampleRate)
+  const data = buffer.getChannelData(0)
+  for (let i = 0; i < frames; i += 1) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / frames)
+  }
+  const src = ctx.createBufferSource()
+  const ng = ctx.createGain()
+  src.buffer = buffer
+  ng.gain.setValueAtTime(0.7, start)
+  ng.gain.exponentialRampToValueAtTime(0.0001, start + 0.35)
+  src.connect(ng)
+  ng.connect(ctx.destination)
+  src.start(start)
+}
+
 /**
- * Shout one packman line at absolute max speech volume.
+ * Speak one line at max volume. Resolves when finished (or after fallback timeout).
+ * Cancels any previous utterance so lines never overlap.
  */
 export function shoutPackmanLine(text, who = 'senior') {
-  if (typeof window === 'undefined') return
+  const myToken = ++speakToken
+
+  if (typeof window === 'undefined') {
+    return Promise.resolve()
+  }
 
   attentionBlast(who)
 
-  if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) return
-
-  const speak = () => {
-    window.speechSynthesis.cancel()
-    const utter = new window.SpeechSynthesisUtterance(text)
-    utter.lang = 'nl-NL'
-    utter.volume = 1
-    utter.rate = who === 'junior' ? 1.15 : 0.92
-    utter.pitch = who === 'junior' ? 1.5 : 0.65
-    const voice = pickDutchVoice(who)
-    if (voice) utter.voice = voice
-
-    window.speechSynthesis.speak(utter)
+  if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
+    return new Promise((r) => window.setTimeout(r, 900))
   }
 
-  if (!(window.speechSynthesis.getVoices() || []).length) {
-    window.speechSynthesis.addEventListener('voiceschanged', speak, { once: true })
-    window.setTimeout(speak, 120)
-  } else {
-    speak()
-  }
+  window.speechSynthesis.cancel()
+
+  return waitForVoices().then(
+    () =>
+      new Promise((resolve) => {
+        if (myToken !== speakToken) {
+          resolve()
+          return
+        }
+
+        window.speechSynthesis.cancel()
+        const utter = new window.SpeechSynthesisUtterance(text)
+        utter.lang = 'nl-NL'
+        utter.volume = 1
+        utter.rate = who === 'junior' ? 1.1 : 0.9
+        utter.pitch = who === 'junior' ? 1.45 : 0.65
+        const voice = pickDutchVoice(who)
+        if (voice) utter.voice = voice
+
+        let settled = false
+        const finish = () => {
+          if (settled) return
+          settled = true
+          resolve()
+        }
+
+        utter.onend = finish
+        utter.onerror = finish
+        // safety if onend never fires
+        window.setTimeout(finish, Math.min(5000, 800 + text.length * 80))
+
+        try {
+          window.speechSynthesis.speak(utter)
+        } catch {
+          finish()
+        }
+      }),
+  )
 }
 
 export function stopPackmanVoice() {
+  speakToken += 1
   try {
     window.speechSynthesis?.cancel()
   } catch {

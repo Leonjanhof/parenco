@@ -1192,3 +1192,383 @@
     padding-left: min(140px, 42vw);
   }
 }
+
+/* ========== boot gate — no show until page ready ========== */
+
+.andres-stage--boot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #001433;
+}
+
+.andres-boot-panel {
+  text-align: center;
+  z-index: 5;
+  animation: andres-stage-in 0.4s ease-out both;
+}
+
+.andres-boot-spinner {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  border: 3px solid rgba(184, 230, 255, 0.25);
+  border-top-color: #08B2FF;
+  border-right-color: #ffd24a;
+  animation: spin-boot 0.8s linear infinite;
+}
+
+@keyframes spin-boot {
+  to { transform: rotate(360deg); }
+}
+
+.andres-boot-title {
+  margin: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  color: #fff;
+}
+
+.andres-boot-sub {
+  margin: 0.5rem 0 0;
+  font-family: Figtree, sans-serif;
+  font-size: 0.85rem;
+  color: rgba(184, 230, 255, 0.75);
+}
+
+/* ========== clickable packman + yeet ========== */
+
+.packman--clickable {
+  cursor: pointer;
+  z-index: 20;
+  pointer-events: auto;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  filter: drop-shadow(0 0 10px rgba(255, 210, 74, 0.55));
+}
+
+.packman--clickable:hover .packman-body,
+.packman--clickable:focus-visible .packman-body {
+  transform: scale(1.08);
+  box-shadow: 0 0 22px rgba(255, 210, 74, 0.75);
+}
+
+.packman--clickable:focus-visible {
+  outline: 2px solid #ffd24a;
+  outline-offset: 6px;
+  border-radius: 12px;
+}
+
+.packman-hint {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  color: #ffd24a;
+  white-space: nowrap;
+  animation: soft-pulse 1s ease-in-out infinite;
+}
+
+.packman--yeeted {
+  animation: junior-yeet 1.4s cubic-bezier(0.2, 0.8, 0.3, 1) forwards !important;
+  z-index: 30 !important;
+  pointer-events: none;
+}
+
+@keyframes junior-yeet {
+  0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+  20% { transform: translate(-20px, -40px) rotate(-25deg) scale(1.15); }
+  55% { transform: translate(120px, -180px) rotate(220deg) scale(1.05); }
+  100% { transform: translate(420px, -60px) rotate(720deg) scale(0.4); opacity: 0; }
+}
+
+.andres-stage--shake {
+  animation: stage-shake 0.7s linear;
+}
+
+@keyframes stage-shake {
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(-8px, 3px) rotate(-0.4deg); }
+  30% { transform: translate(7px, -4px) rotate(0.5deg); }
+  45% { transform: translate(-6px, -2px) rotate(-0.3deg); }
+  60% { transform: translate(5px, 3px) rotate(0.4deg); }
+  75% { transform: translate(-3px, 1px); }
+}
+
+.fx-yeet-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+  background: radial-gradient(circle at 70% 55%, rgba(255, 210, 74, 0.55), transparent 45%);
+  animation: yeet-flash 0.8s ease-out both;
+}
+
+@keyframes yeet-flash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.pak-yeet-banner {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  transform: translateX(-50%);
+  z-index: 35;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ff5a7a, #ffd24a);
+  color: #001433;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: badges-in 0.5s ease-out both;
+}
+
+/* ========== factory robots ========== */
+
+.pak-robot {
+  position: absolute;
+  z-index: 12;
+  width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.pak-robot--alpha {
+  left: 35%;
+  bottom: 6%;
+  animation: robot-patrol-a 30s ease-in-out both;
+}
+
+.pak-robot--beta {
+  left: 62%;
+  bottom: 10%;
+  animation: robot-patrol-b 30s ease-in-out both;
+  transform: scale(0.9);
+}
+
+.pak-robot--gamma {
+  left: 78%;
+  bottom: 4%;
+  animation: robot-patrol-c 30s ease-in-out both;
+  transform: scale(1.05);
+}
+
+.pak-robot--throw {
+  animation: robot-throw 1.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards !important;
+  z-index: 28;
+}
+
+.pak-robot--cheer {
+  animation: robot-cheer 1.2s ease-in-out infinite !important;
+}
+
+.pak-robot--chase {
+  animation: robot-chase 1.4s ease-in forwards !important;
+}
+
+.pak-robot-antenna {
+  width: 3px;
+  height: 10px;
+  background: #B8E6FF;
+  position: relative;
+}
+
+.pak-robot-antenna::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5a7a;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px #ff5a7a;
+  animation: soft-pulse 0.7s ease-in-out infinite;
+}
+
+.pak-robot-head {
+  width: 28px;
+  height: 20px;
+  border-radius: 6px 6px 3px 3px;
+  background: linear-gradient(180deg, #B8E6FF, #0057A8);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 4px;
+  box-shadow: 0 0 12px rgba(8, 178, 255, 0.45);
+}
+
+.pak-robot-eye {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffd24a;
+  box-shadow: 0 0 6px #ffd24a;
+}
+
+.pak-robot-body {
+  width: 32px;
+  height: 26px;
+  margin-top: 2px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #08B2FF, #00205B);
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.pak-robot-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #ffd24a;
+  animation: soft-pulse 0.9s ease-in-out infinite;
+}
+
+.pak-robot-arm {
+  position: absolute;
+  top: 28px;
+  width: 16px;
+  height: 5px;
+  border-radius: 3px;
+  background: #B8E6FF;
+}
+
+.pak-robot-arm--l {
+  left: -8px;
+  transform-origin: right center;
+  animation: robot-arm-l 0.6s ease-in-out infinite alternate;
+}
+
+.pak-robot-arm--r {
+  right: -8px;
+  transform-origin: left center;
+  animation: robot-arm-r 0.6s ease-in-out infinite alternate;
+}
+
+.pak-robot--throw .pak-robot-arm--r {
+  animation: robot-arm-yeet 0.5s ease-out forwards;
+}
+
+@keyframes robot-arm-l {
+  from { transform: rotate(20deg); }
+  to { transform: rotate(-25deg); }
+}
+
+@keyframes robot-arm-r {
+  from { transform: rotate(-15deg); }
+  to { transform: rotate(30deg); }
+}
+
+@keyframes robot-arm-yeet {
+  0% { transform: rotate(-20deg); }
+  40% { transform: rotate(-110deg) scaleX(1.2); }
+  100% { transform: rotate(40deg); }
+}
+
+.pak-robot-legs {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.pak-robot-legs span {
+  width: 7px;
+  height: 12px;
+  border-radius: 2px;
+  background: #00307A;
+  animation: packman-walk 0.35s ease-in-out infinite alternate;
+}
+
+.pak-robot-legs span:last-child {
+  animation-delay: 0.18s;
+}
+
+.pak-robot-tag {
+  margin-top: 3px;
+  font-size: 0.48rem;
+  letter-spacing: 0.05em;
+  color: rgba(184, 230, 255, 0.8);
+  font-family: Figtree, sans-serif;
+}
+
+@keyframes robot-patrol-a {
+  0%, 12% { opacity: 0; transform: translateX(-40px); }
+  18% { opacity: 1; transform: translateX(0); }
+  40% { transform: translateX(50px); }
+  60% { transform: translateX(10px) translateY(-8px); }
+  80% { transform: translateX(70px); }
+  92%, 100% { opacity: 0.85; transform: translateX(20px); }
+}
+
+@keyframes robot-patrol-b {
+  0%, 14% { opacity: 0; transform: scale(0.9) translateX(30px); }
+  22% { opacity: 1; transform: scale(0.9) translateX(0); }
+  45% { transform: scale(0.9) translateX(-40px); }
+  70% { transform: scale(0.9) translateX(20px) translateY(-6px); }
+  100% { opacity: 0.9; transform: scale(0.9) translateX(-10px); }
+}
+
+@keyframes robot-patrol-c {
+  0%, 16% { opacity: 0; transform: scale(1.05) translateY(20px); }
+  24% { opacity: 1; transform: scale(1.05) translateY(0); }
+  50% { transform: scale(1.05) translateX(-30px); }
+  75% { transform: scale(1.05) translateX(15px); }
+  100% { opacity: 0.9; transform: scale(1.05) translateX(-5px); }
+}
+
+@keyframes robot-throw {
+  0% { left: 35%; bottom: 6%; transform: scale(1); }
+  25% { left: 55%; bottom: 14%; transform: scale(1.15); }
+  45% { left: 68%; bottom: 28%; transform: scale(1.2) rotate(-8deg); }
+  70% { left: 75%; bottom: 18%; transform: scale(1.1) rotate(12deg); }
+  100% { left: 82%; bottom: 8%; transform: scale(1) rotate(0); }
+}
+
+@keyframes robot-cheer {
+  0%, 100% { transform: scale(0.9) translateY(0); }
+  50% { transform: scale(0.95) translateY(-12px); }
+}
+
+@keyframes robot-chase {
+  0% { left: 78%; bottom: 4%; }
+  100% { left: 110%; bottom: 30%; opacity: 0; transform: scale(1.2) rotate(20deg); }
+}
+
+.andres-stage--yeet .packman--senior {
+  animation: packman-senior-work 30s ease-in-out both, packman-laugh 0.35s ease-in-out infinite;
+}
+
+@keyframes packman-laugh {
+  from { transform: rotate(-4deg); }
+  to { transform: rotate(4deg); }
+}
+
+@media (max-width: 640px) {
+  .pak-robot--beta {
+    display: none;
+  }
+
+  .packman-hint {
+    font-size: 0.45rem;
+  }
+
+  .pak-yeet-banner {
+    font-size: 0.7rem;
+  }
+}
