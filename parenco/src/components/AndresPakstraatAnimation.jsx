@@ -129,24 +129,47 @@ function PackmanFigure({ name, variant, bubble, talking, onClick, yeeted, clicka
   )
 }
 
-function FactoryRobot({ variant, mode }) {
+function SixAxisRobot({ variant, mode }) {
   return (
-    <div className={`pak-robot pak-robot--${variant} pak-robot--${mode}`} aria-hidden="true">
-      <div className="pak-robot-antenna" />
-      <div className="pak-robot-head">
-        <span className="pak-robot-eye" />
-        <span className="pak-robot-eye" />
+    <div
+      className={`arm6 arm6--${variant} arm6--${mode}`}
+      aria-hidden="true"
+    >
+      <div className="arm6-scene">
+        <div className="arm6-base">
+          <div className="arm6-base-ring" />
+          <div className="arm6-j arm6-j1">
+            <div className="arm6-joint-cap" />
+            <div className="arm6-link arm6-link1">
+              <div className="arm6-j arm6-j2">
+                <div className="arm6-joint-cap" />
+                <div className="arm6-link arm6-link2">
+                  <div className="arm6-j arm6-j3">
+                    <div className="arm6-joint-cap" />
+                    <div className="arm6-link arm6-link3">
+                      <div className="arm6-j arm6-j4">
+                        <div className="arm6-joint-cap arm6-joint-cap--sm" />
+                        <div className="arm6-j arm6-j5">
+                          <div className="arm6-joint-cap arm6-joint-cap--sm" />
+                          <div className="arm6-j arm6-j6">
+                            <div className="arm6-wrist" />
+                            <div className="arm6-gripper">
+                              <span className="arm6-claw arm6-claw--l" />
+                              <span className="arm6-claw arm6-claw--r" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="arm6-shadow" />
       </div>
-      <div className="pak-robot-body">
-        <div className="pak-robot-core" />
-      </div>
-      <div className="pak-robot-arm pak-robot-arm--l" />
-      <div className="pak-robot-arm pak-robot-arm--r" />
-      <div className="pak-robot-legs">
-        <span />
-        <span />
-      </div>
-      <span className="pak-robot-tag">bot {variant}</span>
+      <span className="arm6-tag">6-as · {variant}</span>
     </div>
   )
 }
@@ -416,10 +439,11 @@ function AndresPakstraatAnimation({ onComplete }) {
       <div className="andres-title-wrap">
         <p className="andres-eyebrow">smurfit westrock · parenco</p>
         <h1 className="andres-title andres-title--glitch">andre's pakstraat</h1>
-        <p className="andres-subtitle">meten · doorzetten · inpakken · robots</p>
+        <p className="andres-subtitle">meten · doorzetten · inpakken · 6-as robots</p>
         <div className="andres-title-badges">
           <span>packman crew</span>
           <span>30s show</span>
+          <span>oranje 6-as</span>
           <span>klik packman</span>
         </div>
       </div>
@@ -523,9 +547,9 @@ function AndresPakstraatAnimation({ onComplete }) {
           <div className="pak-fan-blades" />
         </div>
 
-        <FactoryRobot variant="alpha" mode={yeet ? 'throw' : 'patrol'} />
-        <FactoryRobot variant="beta" mode={yeet ? 'cheer' : 'patrol'} />
-        <FactoryRobot variant="gamma" mode={yeet ? 'chase' : 'patrol'} />
+        <SixAxisRobot variant="alpha" mode={yeet ? 'throw' : 'work'} />
+        <SixAxisRobot variant="beta" mode={yeet ? 'spot' : 'work'} />
+        <SixAxisRobot variant="gamma" mode={yeet ? 'wave' : 'work'} />
 
         <PackmanFigure
           name="packman"
