@@ -63,67 +63,76 @@ const JUNIOR_REACTIONS = [
 ]
 
 /**
- * Minimaal 5 volle scènes × 10s, aaneengesloten.
- * Packman + Junior helpen en praten met de vastzittende operator.
+ * 5 volle scènes × 10s — elk met eigen gag, animatie en domme dialoog.
+ * Packman + Junior helpen (soort van) de vastzittende operator.
  */
 const STUCK_SCENES = [
   {
     id: 1,
     key: 'trap',
-    title: 'scène 1 · schoen klem',
-    subtitle: 'operator blijft hangen onder de kokers',
+    title: 'scène 1 · stomme schoen-klem',
+    subtitle: 'operator vs. koker — spoiler: de koker wint',
+    gag: 'waarom altijd MIJN schoen?!',
     lines: [
-      { who: 'operator', text: 'hé… mijn schoen blijft hangen!' },
-      { who: 'operator', text: 'help! help! ik zit vast!' },
+      { who: 'operator', text: 'hé… mijn schoen blijft hangen! weer!' },
+      { who: 'operator', text: 'help! help! dit is zo dom!' },
       { who: 'operator', text: 'help help, ik zit vast onder de kokers!' },
+      { who: 'operator', text: 'waarom altijd míjn schoen?!' },
     ],
   },
   {
     id: 2,
     key: 'arrive',
-    title: 'scène 2 · packman crew komt eraan',
-    subtitle: 'packman en junior rennen naar de operator',
+    title: 'scène 2 · verkeerde helden',
+    subtitle: 'packman denkt pauze, junior neemt koffie mee',
+    gag: 'is er cake? oh wacht — noodgeval',
     lines: [
-      { who: 'senior', text: 'alarm! iemand zit klem onder de rollen!' },
-      { who: 'junior', text: 'ik hoor hem packman, ik ren al!' },
-      { who: 'operator', text: 'packman! junior! help me alsjeblieft!' },
-      { who: 'senior', text: 'blijf liggen maat, wij komen je helpen!' },
+      { who: 'senior', text: 'alarm! of… is er cake op de pakstraat?' },
+      { who: 'junior', text: 'ik neem koffie mee! redden gaat beter met caffeine!' },
+      { who: 'operator', text: 'geen koffie! mijn voet zit onder de koker joh!' },
+      { who: 'senior', text: 'ah. geen cake. wel een vastzittende collega. classic.' },
     ],
   },
   {
     id: 3,
     key: 'inspect',
-    title: 'scène 3 · inspectie bij de voet',
-    subtitle: 'crew checkt de klem en praat hem rustig',
+    title: 'scène 3 · diagnose: stom',
+    subtitle: 'serieuze inspectie met nul nuttige ideeën',
+    gag: 'plan A: schoen uitdoen… te laat',
     lines: [
-      { who: 'senior', text: 'oké, jouw schoen zit muurvast onder die koker.' },
-      { who: 'junior', text: 'adem rustig, we laten je niet zitten!' },
-      { who: 'operator', text: 'au… doe alsjeblieft die rollen stil!' },
-      { who: 'senior', text: 'junior duwt de koker, ik hou je vast.' },
+      { who: 'senior', text: 'diagnose: schoen is bot, koker is botter.' },
+      { who: 'junior', text: 'misschien even uitdoen die schoen? …oh. te laat.' },
+      { who: 'operator', text: 'serieus?! dat was plan A geweest!' },
+      { who: 'junior', text: 'plan B: likken aan de koker? …nee wacht, slecht idee.' },
+      { who: 'senior', text: 'junior. nooit meer plan B zeggen.' },
     ],
   },
   {
     id: 4,
     key: 'rescue',
-    title: 'scène 4 · reddingsactie',
-    subtitle: 'samen trekken en duwen tot hij loskomt',
+    title: 'scène 4 · trek de verkeerde voet',
+    subtitle: 'heldhaftig trekken — eerst aan de vrije voet',
+    gag: 'één… twee… vier? wacht',
     lines: [
-      { who: 'senior', text: 'noodstop! noodstop op de pakstraat!' },
-      { who: 'junior', text: 'koker wijkt! pak zijn arm vast packman!' },
-      { who: 'operator', text: 'trek! trek! ik voel hem loskomen!' },
-      { who: 'junior', text: 'één… twee… drie… nu trekken!' },
+      { who: 'senior', text: 'oké team, trekken op drie! één… twee… vier?' },
+      { who: 'junior', text: 'ik trek al! …aan de verkeerde voet trouwens.' },
+      { who: 'operator', text: 'auw! die zat juist nog los! de ándere!' },
+      { who: 'senior', text: 'rechts is links als je ondersteboven panikeert. nog eens!' },
+      { who: 'junior', text: 'nu écht: één… twee… drie… YEET de schoen!' },
     ],
   },
   {
     id: 5,
     key: 'free',
-    title: 'scène 5 · vrij en gered',
-    subtitle: 'operator is los — crew viert de redding',
+    title: 'scène 5 · schoen-trofee dance',
+    subtitle: 'vrij! niemand mag dit ooit navertellen',
+    gag: 'pack pack victory wiggle',
     lines: [
-      { who: 'operator', text: 'ik ben vrij! dankjewel packman en junior!' },
-      { who: 'senior', text: 'yes! goed gedaan junior, top teamwerk!' },
-      { who: 'junior', text: 'pfoeh, dat was op het nippertje!' },
-      { who: 'senior', text: 'voortaan schoenen ver van de kokers houden!' },
+      { who: 'operator', text: 'ik ben vrij! mijn schoen ruikt naar karton!' },
+      { who: 'senior', text: 'victory dance! junior, doe de pack pack wiggle!' },
+      { who: 'junior', text: 'wiggle wiggle! dit komt níet in het logboek!' },
+      { who: 'operator', text: 'als iemand dit filmt… ik ontslag mezelf.' },
+      { who: 'senior', text: 'regel één: schoenen ver van kokers. regel twee: stilzwijgen.' },
     ],
   },
 ]
@@ -297,43 +306,52 @@ function StuckUnderRollers({ line, scene }) {
           <span className="stuck-op-label">operator</span>
         </div>
 
-        {/* scene 1 visuals */}
+        {/* scene 1: dramatic dumb trap */}
         <div className={`stuck-layer ${sceneKey === 'trap' ? 'stuck-layer--on' : ''}`}>
           <p className="stuck-big-cry stuck-big-cry--soft">HELP!</p>
           <div className="stuck-sparks"><i /><i /><i /><i /></div>
+          <div className="stuck-gag-shoe" title="stomme schoen" />
+          <p className="stuck-gag-banner">schoen vs koker</p>
         </div>
 
-        {/* scene 2: crew arrives running */}
+        {/* scene 2: wrong heroes + coffee */}
         <div className={`stuck-layer ${sceneKey === 'arrive' ? 'stuck-layer--on' : ''}`}>
           <div className="stuck-alarm" />
           <StuckHelper variant="senior" pose="run" />
           <StuckHelper variant="junior" pose="run" />
+          <div className="stuck-coffee" title="koffie" />
+          <div className="stuck-cake-q">cake?</div>
           <p className="stuck-big-cry">HELP!</p>
         </div>
 
-        {/* scene 3: inspect / talk */}
+        {/* scene 3: useless inspection */}
         <div className={`stuck-layer ${sceneKey === 'inspect' ? 'stuck-layer--on' : ''}`}>
           <StuckHelper variant="senior" pose="talk" />
           <StuckHelper variant="junior" pose="inspect" />
           <div className="stuck-inspect-beam" />
-          <p className="stuck-plan-bubble">plan: koker duwen</p>
+          <div className="stuck-magnifier" />
+          <p className="stuck-plan-bubble">diagnose: stom</p>
+          <p className="stuck-plan-bubble stuck-plan-bubble--alt">plan B: ❌ likken</p>
         </div>
 
-        {/* scene 4: rescue pull */}
+        {/* scene 4: wrong-foot tug of war */}
         <div className={`stuck-layer ${sceneKey === 'rescue' ? 'stuck-layer--on' : ''}`}>
           <StuckHelper variant="senior" pose="pull" />
           <StuckHelper variant="junior" pose="push" />
           <div className="stuck-pull-line" />
+          <div className="stuck-wrong-foot-tag">verkeerde voet!</div>
           <div className="stuck-force-arrows"><span /><span /><span /></div>
-          <p className="stuck-count-banner">1 · 2 · 3 · NU!</p>
+          <p className="stuck-count-banner">1 · 2 · 4? · wacht</p>
         </div>
 
-        {/* scene 5: free + celebrate */}
+        {/* scene 5: shoe trophy dance */}
         <div className={`stuck-layer ${sceneKey === 'free' ? 'stuck-layer--on' : ''}`}>
           <StuckHelper variant="senior" pose="cheer" />
           <StuckHelper variant="junior" pose="cheer" />
-          <div className="stuck-free-op" />
+          <div className="stuck-free-op stuck-free-op--dance" />
+          <div className="stuck-shoe-trophy" title="schoen trofee" />
           <p className="stuck-free-banner">vrij!</p>
+          <p className="stuck-gag-banner stuck-gag-banner--win">pack pack wiggle</p>
           <div className="stuck-confetti"><i /><i /><i /><i /><i /><i /><i /><i /></div>
         </div>
       </div>
@@ -342,6 +360,7 @@ function StuckUnderRollers({ line, scene }) {
         <p className="stuck-show-title">noodgeval · vast onder de kokers</p>
         <p className="stuck-scene-tag">{active.title}</p>
         <p className="stuck-scene-sub">{active.subtitle}</p>
+        {active.gag && <p className="stuck-scene-gag"> gag · {active.gag}</p>}
       </div>
 
       <div className="stuck-caption-board" aria-live="assertive">
