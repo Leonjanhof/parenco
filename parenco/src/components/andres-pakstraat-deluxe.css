@@ -2261,6 +2261,19 @@
   opacity: 0.9;
 }
 
+.stuck-scene-gag {
+  margin: 6px auto 0;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 210, 74, 0.18);
+  border: 1px solid rgba(255, 210, 74, 0.45);
+  font-family: Figtree, sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: #ffd24a;
+}
+
 .stuck-stage {
   position: absolute;
   left: 4%;
@@ -2880,6 +2893,239 @@
 
 .stuck-progress-bar--manual {
   animation: none;
+}
+
+/* per-scene gag props */
+.stuck-gag-banner {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(0, 20, 51, 0.8);
+  border: 1px dashed rgba(255, 90, 122, 0.55);
+  font-family: Figtree, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: #ff5a7a;
+  text-transform: lowercase;
+  animation: soft-pulse 1s ease-in-out infinite;
+}
+
+.stuck-gag-banner--win {
+  border-color: rgba(255, 210, 74, 0.6);
+  color: #ffd24a;
+  bottom: 8%;
+}
+
+.stuck-gag-shoe {
+  position: absolute;
+  left: 58%;
+  top: 18%;
+  width: 42px;
+  height: 22px;
+  border-radius: 40% 55% 40% 35%;
+  background: linear-gradient(120deg, #d98940, #5a2e12);
+  box-shadow: 0 0 16px rgba(255, 90, 122, 0.55);
+  animation: stuck-gag-shoe-spin 1.4s ease-in-out infinite;
+}
+
+.stuck-gag-shoe::after {
+  content: '?';
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 1rem;
+  color: #ffd24a;
+}
+
+@keyframes stuck-gag-shoe-spin {
+  0%, 100% { transform: rotate(-18deg) translateY(0); }
+  50% { transform: rotate(22deg) translateY(-8px); }
+}
+
+.stuck-coffee {
+  position: absolute;
+  right: 22%;
+  bottom: 42%;
+  width: 18px;
+  height: 24px;
+  border-radius: 3px 3px 6px 6px;
+  background: linear-gradient(180deg, #fff 0 18%, #6f4e37 18%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  animation: stuck-coffee-bob 0.55s ease-in-out infinite alternate;
+  z-index: 6;
+}
+
+.stuck-coffee::before {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: 6px;
+  width: 8px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+}
+
+.stuck-coffee::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: -8px;
+  width: 4px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 6px 0 0 rgba(255, 255, 255, 0.35);
+  animation: stuck-steam-wisp 0.7s ease-in-out infinite alternate;
+}
+
+@keyframes stuck-coffee-bob {
+  from { transform: translateY(0) rotate(-6deg); }
+  to { transform: translateY(-8px) rotate(8deg); }
+}
+
+@keyframes stuck-steam-wisp {
+  from { opacity: 0.3; transform: translateY(0); }
+  to { opacity: 0.9; transform: translateY(-4px); }
+}
+
+.stuck-cake-q {
+  position: absolute;
+  left: 18%;
+  top: 22%;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #fff;
+  color: #00205B;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+  animation: stuck-cake-pop 0.8s ease-in-out infinite alternate;
+}
+
+.stuck-cake-q::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  transform: rotate(45deg);
+}
+
+@keyframes stuck-cake-pop {
+  from { transform: scale(0.92) rotate(-3deg); }
+  to { transform: scale(1.06) rotate(3deg); }
+}
+
+.stuck-magnifier {
+  position: absolute;
+  right: 26%;
+  bottom: 34%;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 4px solid #ffd24a;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35), inset 0 0 12px rgba(8, 178, 255, 0.35);
+  animation: stuck-magnifier-scan 1.3s ease-in-out infinite alternate;
+  z-index: 6;
+}
+
+.stuck-magnifier::after {
+  content: '';
+  position: absolute;
+  right: -14px;
+  bottom: -8px;
+  width: 16px;
+  height: 5px;
+  border-radius: 4px;
+  background: #c97b3a;
+  transform: rotate(40deg);
+}
+
+@keyframes stuck-magnifier-scan {
+  from { transform: translate(-6px, 4px) rotate(-8deg); }
+  to { transform: translate(8px, -6px) rotate(10deg); }
+}
+
+.stuck-plan-bubble--alt {
+  top: 34%;
+  background: rgba(255, 90, 122, 0.95);
+  color: #fff;
+  font-size: 0.75rem;
+  animation: soft-pulse 0.9s ease-in-out infinite;
+}
+
+.stuck-wrong-foot-tag {
+  position: absolute;
+  left: 52%;
+  bottom: 48%;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #ff5a7a;
+  color: #fff;
+  font-family: Figtree, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  animation: stuck-wrong-shake 0.35s ease-in-out infinite alternate;
+  z-index: 6;
+}
+
+@keyframes stuck-wrong-shake {
+  from { transform: rotate(-6deg) translateX(-2px); }
+  to { transform: rotate(6deg) translateX(2px); }
+}
+
+.stuck-shoe-trophy {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  width: 36px;
+  height: 20px;
+  margin-left: -18px;
+  border-radius: 40% 55% 40% 35%;
+  background: linear-gradient(120deg, #ffd24a, #c97b3a);
+  box-shadow: 0 0 20px rgba(255, 210, 74, 0.7);
+  animation: stuck-trophy-float 0.9s ease-in-out infinite alternate;
+  z-index: 6;
+}
+
+.stuck-shoe-trophy::before {
+  content: 'nr.1';
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: #ffd24a;
+  white-space: nowrap;
+}
+
+@keyframes stuck-trophy-float {
+  from { transform: translateY(0) rotate(-8deg); }
+  to { transform: translateY(-12px) rotate(8deg); }
+}
+
+.stuck-free-op--dance {
+  animation: stuck-jump-free 0.45s ease-in-out infinite alternate, stuck-dance-wiggle 0.45s ease-in-out infinite;
+}
+
+@keyframes stuck-dance-wiggle {
+  from { margin-left: -26px; }
+  to { margin-left: -18px; }
 }
 
 @keyframes stuck-show-in {
