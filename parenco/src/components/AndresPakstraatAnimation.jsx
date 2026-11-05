@@ -97,14 +97,24 @@ function waitForPageReady() {
   })
 }
 
-function PackmanFigure({ name, variant, bubble, talking, onClick, yeeted, clickable }) {
+function PackmanFigure({
+  name,
+  variant,
+  bubble,
+  talking,
+  onClick,
+  yeeted,
+  clickable,
+  ariaLabel,
+  hint,
+}) {
   const Tag = clickable ? 'button' : 'div'
   return (
     <Tag
       type={clickable ? 'button' : undefined}
       className={`packman packman--${variant} ${yeeted ? 'packman--yeeted' : ''} ${clickable ? 'packman--clickable' : ''}`}
       onClick={onClick}
-      aria-label={clickable ? 'klik packman om junior eruit te gooien' : undefined}
+      aria-label={clickable ? ariaLabel : undefined}
     >
       <div className={`packman-bubble ${talking ? 'packman-bubble--talking' : 'packman-bubble--idle'}`}>
         {bubble}
@@ -124,8 +134,37 @@ function PackmanFigure({ name, variant, bubble, talking, onClick, yeeted, clicka
       <div className="packman-arm packman-arm--right" />
       <div className="packman-tool" />
       <span className="packman-name">{name}</span>
-      {clickable && <span className="packman-hint">klik mij!</span>}
+      {clickable && <span className="packman-hint">{hint || 'klik mij!'}</span>}
     </Tag>
+  )
+}
+
+function GiantFootCircus() {
+  return (
+    <div className="foot-circus" aria-hidden="true">
+      <div className="foot-circus-spot" />
+      <div className="foot-circus-stack">
+        <div className="giant-foot">
+          <div className="giant-foot-ankle" />
+          <div className="giant-foot-body">
+            <div className="giant-foot-arch" />
+            <div className="giant-foot-toes">
+              <i /><i /><i /><i /><i />
+            </div>
+            <div className="giant-foot-nail" />
+          </div>
+          <div className="giant-foot-sole" />
+        </div>
+        <div className="tiny-ball">
+          <span className="tiny-ball-shine" />
+          <span className="tiny-ball-stripe" />
+        </div>
+      </div>
+      <p className="foot-circus-caption">enorme voet op mini balletje</p>
+      <div className="foot-circus-spark">
+        <i /><i /><i /><i /><i /><i />
+      </div>
+    </div>
   )
 }
 
@@ -306,9 +345,11 @@ function AndresPakstraatAnimation({ onComplete }) {
   const [status, setStatus] = useState(STATUS_TICKER[0])
   const [chatLine, setChatLine] = useState(null)
   const [yeet, setYeet] = useState(false)
+  const [footShow, setFootShow] = useState(false)
   const [shake, setShake] = useState(false)
   const chatAlive = useRef(true)
   const yeetLock = useRef(false)
+  const footLock = useRef(false)
 
   // wait until page (+ fonts) fully loaded before starting the show
   useEffect(() => {
@@ -364,7 +405,7 @@ function AndresPakstraatAnimation({ onComplete }) {
 
   // sequential chat — never overlap; wait for speech end
   useEffect(() => {
-    if (boot || yeet) return undefined
+    if (boot || yeet || footShow) return undefined
 
     chatAlive.current = true
     let prev = null
@@ -387,10 +428,10 @@ function AndresPakstraatAnimation({ onComplete }) {
       chatAlive.current = false
       stopPackmanVoice()
     }
-  }, [boot, yeet])
+  }, [boot, yeet, footShow])
 
   const handlePackmanClick = () => {
-    if (yeetLock.current || yeet || boot) return
+    if (yeetLock.current || yeet || boot || footShow) return
     yeetLock.current = true
     chatAlive.current = false
     stopPackmanVoice()
@@ -402,6 +443,21 @@ function AndresPakstraatAnimation({ onComplete }) {
     window.setTimeout(() => {
       shoutPackmanLine('aaaaaa ik vlieg!', 'junior')
     }, 700)
+  }
+
+  const handleJuniorClick = () => {
+    if (footLock.current || footShow || yeet || boot) return
+    footLock.current = true
+    chatAlive.current = false
+    stopPackmanVoice()
+    setFootShow(true)
+    setShake(true)
+    playYeetBoom()
+    shoutPackmanLine('kijk die voet!', 'junior')
+    window.setTimeout(() => setShake(false), 800)
+    window.setTimeout(() => {
+      shoutPackmanLine('die voet rolt op dat balletje!', 'senior')
+    }, 1200)
   }
 
   if (boot) {
@@ -416,14 +472,18 @@ function AndresPakstraatAnimation({ onComplete }) {
     )
   }
 
-  const seniorLine = chatLine?.who === 'senior' ? chatLine.text : (yeet ? 'yeet!' : '…')
-  const juniorLine = chatLine?.who === 'junior' ? chatLine.text : (yeet ? 'aaaa!' : '…')
-  const seniorTalking = chatLine?.who === 'senior' && !yeet
-  const juniorTalking = chatLine?.who === 'junior' && !yeet
+  const seniorLine = chatLine?.who === 'senior'
+    ? chatLine.text
+    : (yeet ? 'yeet!' : footShow ? 'wtf voet?!' : '…')
+  const juniorLine = chatLine?.who === 'junior'
+    ? chatLine.text
+    : (yeet ? 'aaaa!' : footShow ? 'circus mode!' : '…')
+  const seniorTalking = chatLine?.who === 'senior' && !yeet && !footShow
+  const juniorTalking = chatLine?.who === 'junior' && !yeet && !footShow
 
   return (
     <div
-      className={`andres-stage andres-stage--deluxe ${phase === 'outro' ? 'andres-stage--outro' : ''} ${shake ? 'andres-stage--shake' : ''} ${yeet ? 'andres-stage--yeet' : ''}`}
+      className={`andres-stage andres-stage--deluxe ${phase === 'outro' ? 'andres-stage--outro' : ''} ${shake ? 'andres-stage--shake' : ''} ${yeet ? 'andres-stage--yeet' : ''} ${footShow ? 'andres-stage--foot' : ''}`}
       role="dialog"
       aria-label="andre's pakstraat animatie"
       aria-live="polite"
@@ -432,9 +492,10 @@ function AndresPakstraatAnimation({ onComplete }) {
       <div className="andres-floor andres-floor--deluxe" aria-hidden="true" />
       <FactoryExtras />
       {yeet && <div className="fx-yeet-flash" aria-hidden="true" />}
+      {footShow && <GiantFootCircus />}
 
       <PackmanMiniGame />
-      <ControlHud status={yeet ? 'junior gelanceerd!' : status} />
+      <ControlHud status={yeet ? 'junior gelanceerd!' : footShow ? 'voet circus!!!' : status} />
 
       <div className="andres-title-wrap">
         <p className="andres-eyebrow">smurfit westrock · parenco</p>
@@ -445,6 +506,7 @@ function AndresPakstraatAnimation({ onComplete }) {
           <span>30s show</span>
           <span>oranje 6-as</span>
           <span>klik packman</span>
+          <span>klik junior</span>
         </div>
       </div>
 
@@ -556,8 +618,10 @@ function AndresPakstraatAnimation({ onComplete }) {
           variant="senior"
           bubble={seniorLine}
           talking={seniorTalking}
-          clickable={!yeet}
+          clickable={!yeet && !footShow}
           onClick={handlePackmanClick}
+          ariaLabel="klik packman om junior eruit te gooien"
+          hint="klik: yeet"
         />
         <PackmanFigure
           name="packman junior"
@@ -565,6 +629,10 @@ function AndresPakstraatAnimation({ onComplete }) {
           bubble={juniorLine}
           talking={juniorTalking}
           yeeted={yeet}
+          clickable={!yeet && !footShow}
+          onClick={handleJuniorClick}
+          ariaLabel="klik junior voor voet circus easter egg"
+          hint="klik: voet"
         />
 
         <div className="andres-path-dots">
