@@ -1,6 +1,7 @@
 /**
  * Loud spoken packman dialogue — one speaker at a time.
  * shoutPackmanLine returns a Promise that resolves when speech ends.
+ * Rates stay slow so bubbles stay readable and each speaker is clear.
  */
 
 let sharedAudioCtx = null
@@ -25,6 +26,9 @@ function pickDutchVoice(who) {
   if (who === 'junior') {
     return nl.find((v) => /female|zira|soft|ellen/i.test(v.name)) || nl[nl.length - 1]
   }
+  if (who === 'operator') {
+    return nl.find((v) => /male|google|xander|robusto/i.test(v.name)) || nl[Math.min(1, nl.length - 1)]
+  }
   return nl.find((v) => /male|google|xander|robusto/i.test(v.name)) || nl[0]
 }
 
@@ -44,26 +48,25 @@ function waitForVoices() {
   })
 }
 
+/** Short cue so speech start stays audible — not a long blast over the line. */
 function attentionBlast(who) {
   const ctx = getAudioCtx()
   if (!ctx) return
   const start = ctx.currentTime
-  const base = who === 'junior' ? 560 : 260
+  const base = who === 'junior' ? 520 : who === 'operator' ? 340 : 240
 
-  ;[1, 1.5, 2].forEach((mult, i) => {
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-    osc.type = i === 0 ? 'sawtooth' : 'square'
-    osc.frequency.setValueAtTime(base * mult, start)
-    osc.frequency.exponentialRampToValueAtTime(base * mult * 1.6, start + 0.1)
-    gain.gain.setValueAtTime(0.0001, start)
-    gain.gain.exponentialRampToValueAtTime(0.9 / (i + 1), start + 0.015)
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.22)
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.start(start)
-    osc.stop(start + 0.24)
-  })
+  const osc = ctx.createOscillator()
+  const gain = ctx.createGain()
+  osc.type = 'square'
+  osc.frequency.setValueAtTime(base, start)
+  osc.frequency.exponentialRampToValueAtTime(base * 1.35, start + 0.06)
+  gain.gain.setValueAtTime(0.0001, start)
+  gain.gain.exponentialRampToValueAtTime(0.35, start + 0.01)
+  gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.09)
+  osc.connect(gain)
+  gain.connect(ctx.destination)
+  osc.start(start)
+  osc.stop(start + 0.1)
 }
 
 /** Huge throw / impact SFX when junior gets yeeted */
@@ -101,10 +104,19 @@ export function playYeetBoom() {
   src.start(start)
 }
 
-/**
- * Speak one line at max volume. Resolves when finished (or after fallback timeout).
- * Cancels any previous utterance so lines never overlap.
- */
+const SPEECH_RATE = {
+  senior: 0.62,
+  junior: 0.72,
+  operator: 0.68,
+}
+
+const SPEECH_PITCH = {
+  senior: 0.55,
+  junior: 1.55,
+  operator: 0.95,
+}
+
+/** Slow spoken line with clear speaker identity. Resolves when finished. */
 export function shoutPackmanLine(text, who = 'senior') {
   const myToken = ++speakToken
 
@@ -115,10 +127,18 @@ export function shoutPackmanLine(text, who = 'senior') {
   attentionBlast(who)
 
   if (!window.speechSynthesis || !window.SpeechSynthesisUtterance) {
-    return new Promise((r) => window.setTimeout(r, 900))
+    const rate = SPEECH_RATE[who] || 0.65
+    const fallbackMs = Math.min(14000, 2200 + text.length * (120 / rate))
+    return new Promise((r) => window.setTimeout(r, fallbackMs))
   }
 
   window.speechSynthesis.cancel()
+
+  // light pauses so Dutch TTS stays intelligible
+  const spoken = String(text)
+    .replace(/([,.!?])/g, '$1 ')
+    .replace(/\s+/g, ' ')
+    .trim()
 
   return waitForVoices().then(
     () =>
@@ -129,11 +149,12 @@ export function shoutPackmanLine(text, who = 'senior') {
         }
 
         window.speechSynthesis.cancel()
-        const utter = new window.SpeechSynthesisUtterance(text)
+        const utter = new window.SpeechSynthesisUtterance(spoken)
         utter.lang = 'nl-NL'
         utter.volume = 1
-        utter.rate = who === 'junior' ? 1.1 : 0.9
-        utter.pitch = who === 'junior' ? 1.45 : 0.65
+        const rate = SPEECH_RATE[who] || 0.65
+        utter.rate = rate
+        utter.pitch = SPEECH_PITCH[who] ?? 1
         const voice = pickDutchVoice(who)
         if (voice) utter.voice = voice
 
@@ -146,8 +167,9 @@ export function shoutPackmanLine(text, who = 'senior') {
 
         utter.onend = finish
         utter.onerror = finish
-        // safety if onend never fires
-        window.setTimeout(finish, Math.min(5000, 800 + text.length * 80))
+        // slow speech needs a long safety window — do not cut lines short
+        const safetyMs = Math.min(16000, Math.max(4000, 2200 + spoken.length * (145 / rate)))
+        window.setTimeout(finish, safetyMs)
 
         try {
           window.speechSynthesis.speak(utter)

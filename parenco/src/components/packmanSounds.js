@@ -102,7 +102,7 @@ function runScore(ctx) {
     gain: 0.09,
   })
 
-  // chomp loop under dialogue (~2.5s → 26s) — quieter so speech stays on top
+  // chomp loop under dialogue (~2.5s → 26s) — very quiet under slow speech
   let chompT = start + 2.4
   let flip = false
   while (chompT < start + 26) {
@@ -113,10 +113,10 @@ function runScore(ctx) {
       type: 'sawtooth',
       start: chompT,
       dur: 0.11,
-      gain: 0.035,
+      gain: 0.018,
     })
     flip = !flip
-    chompT += 0.22
+    chompT += 0.28
   }
 
   // measure beep

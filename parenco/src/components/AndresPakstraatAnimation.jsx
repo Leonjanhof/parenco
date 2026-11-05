@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { playPackmanSoundtrack } from './packmanSounds'
 import { playYeetBoom, shoutPackmanLine, stopPackmanVoice } from './packmanVoice'
+import { playStuckSoundtrack } from './stuckSounds'
 
 const ANIMATION_MS = 30000
-const CHAT_GAP_MS = 450
+const CHAT_GAP_MS = 1100
+const STUCK_MS = 30000
 
 const STATUS_TICKER = [
   'rol binnen…',
@@ -58,6 +60,29 @@ const JUNIOR_REACTIONS = [
   'jij bent de boss',
   'ik luister, ik doe',
 ]
+
+/** Spoken script for the shoe → stuck-under-rollers 30s show */
+const STUCK_SCRIPT = [
+  { who: 'operator', text: 'hé… mijn schoen blijft hangen!' },
+  { who: 'operator', text: 'help! help!' },
+  { who: 'operator', text: 'ik zit vast onder de kokers!' },
+  { who: 'operator', text: 'help help, ik zit vast onder de kokers!' },
+  { who: 'senior', text: 'alarm! iemand zit klem onder de rollen!' },
+  { who: 'junior', text: 'ik kom eraan! blijf liggen!' },
+  { who: 'operator', text: 'de koker draait nog! stop stop stop!' },
+  { who: 'senior', text: 'noodstop! noodstop op de pakstraat!' },
+  { who: 'junior', text: 'pak zijn arm vast, ik duw de koker weg!' },
+  { who: 'operator', text: 'au! mijn voet! help me eruit!' },
+  { who: 'senior', text: 'bijna… trek mee op drie!' },
+  { who: 'operator', text: 'één… twee… drie… ik ben vrij!' },
+  { who: 'junior', text: 'pfoeh, dat was op het nippertje!' },
+]
+
+const SPEAKER_LABEL = {
+  senior: 'packman',
+  junior: 'packman junior',
+  operator: 'operator',
+}
 
 function pickRandom(list, avoid) {
   if (list.length === 1) return list[0]
@@ -117,7 +142,8 @@ function PackmanFigure({
       aria-label={clickable ? ariaLabel : undefined}
     >
       <div className={`packman-bubble ${talking ? 'packman-bubble--talking' : 'packman-bubble--idle'}`}>
-        {bubble}
+        <strong className="packman-bubble-who">{name}</strong>
+        <span className="packman-bubble-text">{bubble}</span>
       </div>
       <div className="packman-hat" />
       <div className="packman-body">
@@ -136,6 +162,97 @@ function PackmanFigure({
       <span className="packman-name">{name}</span>
       {clickable && <span className="packman-hint">{hint || 'klik mij!'}</span>}
     </Tag>
+  )
+}
+
+function ShoeTrigger({ onClick, disabled }) {
+  return (
+    <button
+      type="button"
+      className={`shoe-trigger ${disabled ? 'shoe-trigger--off' : ''}`}
+      onClick={onClick}
+      disabled={disabled}
+      aria-label="klik de schoen voor vast onder de kokers animatie"
+      title="klik: vast onder de kokers"
+    >
+      <span className="shoe-trigger-icon" aria-hidden="true">
+        <i className="shoe-sole" />
+        <i className="shoe-vamp" />
+        <i className="shoe-toe" />
+        <i className="shoe-laces" />
+      </span>
+      <span className="shoe-trigger-label">schoen · klik</span>
+    </button>
+  )
+}
+
+function StuckUnderRollers({ line }) {
+  const speaker = line ? SPEAKER_LABEL[line.who] || line.who : '…'
+  const text = line?.text || 'laden…'
+
+  return (
+    <div className="stuck-show" role="group" aria-label="operator vast onder de kokers">
+      <div className="stuck-show-bg" aria-hidden="true" />
+      <div className="stuck-rollers stuck-rollers--persist" aria-hidden="true">
+        <span className="stuck-koker stuck-koker--a" />
+        <span className="stuck-koker stuck-koker--b" />
+        <span className="stuck-koker stuck-koker--c" />
+      </div>
+      <div className="stuck-operator stuck-operator--persist" aria-hidden="true">
+        <div className="stuck-op-head" />
+        <div className="stuck-op-body" />
+        <div className="stuck-op-legs">
+          <span className="stuck-op-leg stuck-op-leg--free" />
+          <span className="stuck-op-leg stuck-op-leg--caught">
+            <i className="stuck-shoe" />
+          </span>
+        </div>
+        <div className="stuck-op-arms">
+          <span /><span />
+        </div>
+      </div>
+      <div className="stuck-scenes" aria-hidden="true">
+        {/* scene 1: walk + catch */}
+        <div className="stuck-scene stuck-scene--walk">
+          <p className="stuck-scene-tag">scène 1 · schoen klem</p>
+        </div>
+
+        {/* scene 2: thrash / panic */}
+        <div className="stuck-scene stuck-scene--panic">
+          <div className="stuck-alarm" />
+          <div className="stuck-sparks"><i /><i /><i /><i /><i /><i /></div>
+          <p className="stuck-big-cry">HELP!</p>
+          <p className="stuck-scene-tag">scène 2 · vast onder kokers</p>
+        </div>
+
+        {/* scene 3: helpers arrive */}
+        <div className="stuck-scene stuck-scene--rescue">
+          <div className="stuck-helper stuck-helper--senior" title="packman" />
+          <div className="stuck-helper stuck-helper--junior" title="junior" />
+          <div className="stuck-pull-line" />
+          <p className="stuck-scene-tag">scène 3 · reddingsactie</p>
+        </div>
+
+        {/* scene 4: free */}
+        <div className="stuck-scene stuck-scene--free">
+          <div className="stuck-free-op" />
+          <p className="stuck-free-banner">vrij!</p>
+          <p className="stuck-scene-tag">scène 4 · gered</p>
+        </div>
+      </div>
+
+      <div className="stuck-caption-board" aria-live="assertive">
+        <span className={`stuck-caption-who stuck-caption-who--${line?.who || 'operator'}`}>
+          {speaker}
+        </span>
+        <p className="stuck-caption-text">{text}</p>
+      </div>
+
+      <div className="stuck-progress" aria-hidden="true">
+        <div className="stuck-progress-bar" />
+      </div>
+      <p className="stuck-show-title">noodgeval · vast onder de kokers</p>
+    </div>
   )
 }
 
@@ -345,10 +462,17 @@ function AndresPakstraatAnimation({ onComplete }) {
   const [chatLine, setChatLine] = useState(null)
   const [yeet, setYeet] = useState(false)
   const [footShow, setFootShow] = useState(false)
+  const [stuckShow, setStuckShow] = useState(false)
+  const [stuckLine, setStuckLine] = useState(null)
   const [shake, setShake] = useState(false)
   const chatAlive = useRef(true)
+  const stuckAlive = useRef(false)
   const yeetLock = useRef(false)
   const footLock = useRef(false)
+  const stuckLock = useRef(false)
+  const mainTimers = useRef({ done: null, hide: null, tickers: [] })
+  const stopMainSound = useRef(() => {})
+  const stopStuckSound = useRef(() => {})
 
   // wait until page (+ fonts) fully loaded before starting the show
   useEffect(() => {
@@ -361,9 +485,9 @@ function AndresPakstraatAnimation({ onComplete }) {
     }
   }, [])
 
-  // main show timers — only after boot
+  // main show timers — only after boot; paused/replaced when stuck plays
   useEffect(() => {
-    if (boot) return undefined
+    if (boot || stuckShow) return undefined
 
     let stopSound = () => {}
     let started = false
@@ -372,6 +496,7 @@ function AndresPakstraatAnimation({ onComplete }) {
       if (started) return
       started = true
       stopSound = playPackmanSoundtrack()
+      stopMainSound.current = stopSound
     }
 
     startSound()
@@ -389,6 +514,7 @@ function AndresPakstraatAnimation({ onComplete }) {
 
     const doneTimer = window.setTimeout(() => setPhase('outro'), ANIMATION_MS - 900)
     const hideTimer = window.setTimeout(() => onComplete?.(), ANIMATION_MS)
+    mainTimers.current = { done: doneTimer, hide: hideTimer, tickers }
 
     return () => {
       window.clearTimeout(doneTimer)
@@ -400,11 +526,11 @@ function AndresPakstraatAnimation({ onComplete }) {
       stopSound()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boot])
+  }, [boot, stuckShow])
 
   // sequential chat — never overlap; wait for speech end
   useEffect(() => {
-    if (boot || yeet || footShow) return undefined
+    if (boot || yeet || footShow || stuckShow) return undefined
 
     chatAlive.current = true
     let prev = null
@@ -427,10 +553,42 @@ function AndresPakstraatAnimation({ onComplete }) {
       chatAlive.current = false
       stopPackmanVoice()
     }
-  }, [boot, yeet, footShow])
+  }, [boot, yeet, footShow, stuckShow])
+
+  // stuck-under-rollers dialogue + 30s lifecycle
+  useEffect(() => {
+    if (!stuckShow) return undefined
+
+    stuckAlive.current = true
+    stopStuckSound.current = playStuckSoundtrack()
+
+    const run = async () => {
+      for (const line of STUCK_SCRIPT) {
+        if (!stuckAlive.current) break
+        setStuckLine(line)
+        await shoutPackmanLine(line.text, line.who)
+        if (!stuckAlive.current) break
+        await new Promise((r) => window.setTimeout(r, 550))
+      }
+    }
+
+    run()
+
+    const outro = window.setTimeout(() => setPhase('outro'), STUCK_MS - 900)
+    const done = window.setTimeout(() => onComplete?.(), STUCK_MS)
+
+    return () => {
+      stuckAlive.current = false
+      window.clearTimeout(outro)
+      window.clearTimeout(done)
+      stopPackmanVoice()
+      stopStuckSound.current?.()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stuckShow])
 
   const handlePackmanClick = () => {
-    if (yeetLock.current || yeet || boot || footShow) return
+    if (yeetLock.current || yeet || boot || footShow || stuckShow) return
     yeetLock.current = true
     chatAlive.current = false
     stopPackmanVoice()
@@ -445,7 +603,7 @@ function AndresPakstraatAnimation({ onComplete }) {
   }
 
   const handleJuniorClick = () => {
-    if (footLock.current || footShow || yeet || boot) return
+    if (footLock.current || footShow || yeet || boot || stuckShow) return
     footLock.current = true
     chatAlive.current = false
     stopPackmanVoice()
@@ -457,6 +615,22 @@ function AndresPakstraatAnimation({ onComplete }) {
     window.setTimeout(() => {
       shoutPackmanLine('die voet rolt op dat balletje!', 'senior')
     }, 1200)
+  }
+
+  const handleShoeClick = () => {
+    if (stuckLock.current || stuckShow || yeet || footShow || boot) return
+    stuckLock.current = true
+    chatAlive.current = false
+    stopPackmanVoice()
+    stopMainSound.current?.()
+    const { done, hide, tickers } = mainTimers.current
+    if (done) window.clearTimeout(done)
+    if (hide) window.clearTimeout(hide)
+    tickers?.forEach((id) => window.clearTimeout(id))
+    setShake(true)
+    setStuckShow(true)
+    setStatus('NOODGEVAL · vast onder kokers')
+    window.setTimeout(() => setShake(false), 700)
   }
 
   if (boot) {
@@ -473,16 +647,17 @@ function AndresPakstraatAnimation({ onComplete }) {
 
   const seniorLine = chatLine?.who === 'senior'
     ? chatLine.text
-    : (yeet ? 'yeet!' : footShow ? 'wtf voet?!' : '…')
+    : (yeet ? 'yeet!' : footShow ? 'wtf voet?!' : stuckShow ? 'noodstop!' : '…')
   const juniorLine = chatLine?.who === 'junior'
     ? chatLine.text
-    : (yeet ? 'aaaa!' : footShow ? 'circus mode!' : '…')
-  const seniorTalking = chatLine?.who === 'senior' && !yeet && !footShow
-  const juniorTalking = chatLine?.who === 'junior' && !yeet && !footShow
+    : (yeet ? 'aaaa!' : footShow ? 'circus mode!' : stuckShow ? 'ik help!' : '…')
+  const seniorTalking = chatLine?.who === 'senior' && !yeet && !footShow && !stuckShow
+  const juniorTalking = chatLine?.who === 'junior' && !yeet && !footShow && !stuckShow
+  const busy = yeet || footShow || stuckShow
 
   return (
     <div
-      className={`andres-stage andres-stage--deluxe ${phase === 'outro' ? 'andres-stage--outro' : ''} ${shake ? 'andres-stage--shake' : ''} ${yeet ? 'andres-stage--yeet' : ''} ${footShow ? 'andres-stage--foot' : ''}`}
+      className={`andres-stage andres-stage--deluxe ${phase === 'outro' ? 'andres-stage--outro' : ''} ${shake ? 'andres-stage--shake' : ''} ${yeet ? 'andres-stage--yeet' : ''} ${footShow ? 'andres-stage--foot' : ''} ${stuckShow ? 'andres-stage--stuck' : ''}`}
       role="dialog"
       aria-label="andre's pakstraat animatie"
       aria-live="polite"
@@ -492,10 +667,23 @@ function AndresPakstraatAnimation({ onComplete }) {
       <FactoryExtras />
       {yeet && <div className="fx-yeet-flash" aria-hidden="true" />}
       {footShow && <GiantFootCircus />}
+      {stuckShow && <StuckUnderRollers line={stuckLine} />}
 
+      <ShoeTrigger onClick={handleShoeClick} disabled={busy} />
       <PackmanMiniGame />
-      <ControlHud status={yeet ? 'junior gelanceerd!' : footShow ? 'voet circus!!!' : status} />
+      <ControlHud
+        status={
+          yeet
+            ? 'junior gelanceerd!'
+            : footShow
+              ? 'voet circus!!!'
+              : stuckShow
+                ? 'NOODGEVAL · vast!'
+                : status
+        }
+      />
 
+      {!stuckShow && (
       <div className="andres-title-wrap">
         <p className="andres-eyebrow">smurfit westrock · parenco</p>
         <h1 className="andres-title andres-title--glitch">andre's pakstraat</h1>
@@ -506,8 +694,19 @@ function AndresPakstraatAnimation({ onComplete }) {
           <span>oranje 6-as</span>
           <span>klik packman</span>
           <span>klik junior</span>
+          <span>klik schoen</span>
         </div>
       </div>
+      )}
+
+      {chatLine && !busy && (
+        <div className="pak-subtitle" aria-live="polite">
+          <span className={`pak-subtitle-who pak-subtitle-who--${chatLine.who}`}>
+            {SPEAKER_LABEL[chatLine.who]}
+          </span>
+          <span className="pak-subtitle-text">{chatLine.text}</span>
+        </div>
+      )}
 
       <div className="andres-scene andres-scene--deluxe">
         <div className="pak-crane">
@@ -617,7 +816,7 @@ function AndresPakstraatAnimation({ onComplete }) {
           variant="senior"
           bubble={seniorLine}
           talking={seniorTalking}
-          clickable={!yeet && !footShow}
+          clickable={!busy}
           onClick={handlePackmanClick}
           ariaLabel="klik packman om junior eruit te gooien"
           hint="klik: yeet"
@@ -628,7 +827,7 @@ function AndresPakstraatAnimation({ onComplete }) {
           bubble={juniorLine}
           talking={juniorTalking}
           yeeted={yeet}
-          clickable={!yeet && !footShow}
+          clickable={!busy}
           onClick={handleJuniorClick}
           ariaLabel="klik junior voor voet circus easter egg"
           hint="klik: voet"
