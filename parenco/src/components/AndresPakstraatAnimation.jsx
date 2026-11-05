@@ -5,7 +5,8 @@ import { playStuckSoundtrack } from './stuckSounds'
 
 const ANIMATION_MS = 30000
 const CHAT_GAP_MS = 1100
-const STUCK_MS = 30000
+const STUCK_SCENE_MS = 10000
+const STUCK_LINE_GAP_MS = 500
 
 const STATUS_TICKER = [
   'rol binnen…',
@@ -61,22 +62,73 @@ const JUNIOR_REACTIONS = [
   'ik luister, ik doe',
 ]
 
-/** Spoken script for the shoe → stuck-under-rollers 30s show */
-const STUCK_SCRIPT = [
-  { who: 'operator', text: 'hé… mijn schoen blijft hangen!' },
-  { who: 'operator', text: 'help! help!' },
-  { who: 'operator', text: 'ik zit vast onder de kokers!' },
-  { who: 'operator', text: 'help help, ik zit vast onder de kokers!' },
-  { who: 'senior', text: 'alarm! iemand zit klem onder de rollen!' },
-  { who: 'junior', text: 'ik kom eraan! blijf liggen!' },
-  { who: 'operator', text: 'de koker draait nog! stop stop stop!' },
-  { who: 'senior', text: 'noodstop! noodstop op de pakstraat!' },
-  { who: 'junior', text: 'pak zijn arm vast, ik duw de koker weg!' },
-  { who: 'operator', text: 'au! mijn voet! help me eruit!' },
-  { who: 'senior', text: 'bijna… trek mee op drie!' },
-  { who: 'operator', text: 'één… twee… drie… ik ben vrij!' },
-  { who: 'junior', text: 'pfoeh, dat was op het nippertje!' },
+/**
+ * Minimaal 5 volle scènes × 10s, aaneengesloten.
+ * Packman + Junior helpen en praten met de vastzittende operator.
+ */
+const STUCK_SCENES = [
+  {
+    id: 1,
+    key: 'trap',
+    title: 'scène 1 · schoen klem',
+    subtitle: 'operator blijft hangen onder de kokers',
+    lines: [
+      { who: 'operator', text: 'hé… mijn schoen blijft hangen!' },
+      { who: 'operator', text: 'help! help! ik zit vast!' },
+      { who: 'operator', text: 'help help, ik zit vast onder de kokers!' },
+    ],
+  },
+  {
+    id: 2,
+    key: 'arrive',
+    title: 'scène 2 · packman crew komt eraan',
+    subtitle: 'packman en junior rennen naar de operator',
+    lines: [
+      { who: 'senior', text: 'alarm! iemand zit klem onder de rollen!' },
+      { who: 'junior', text: 'ik hoor hem packman, ik ren al!' },
+      { who: 'operator', text: 'packman! junior! help me alsjeblieft!' },
+      { who: 'senior', text: 'blijf liggen maat, wij komen je helpen!' },
+    ],
+  },
+  {
+    id: 3,
+    key: 'inspect',
+    title: 'scène 3 · inspectie bij de voet',
+    subtitle: 'crew checkt de klem en praat hem rustig',
+    lines: [
+      { who: 'senior', text: 'oké, jouw schoen zit muurvast onder die koker.' },
+      { who: 'junior', text: 'adem rustig, we laten je niet zitten!' },
+      { who: 'operator', text: 'au… doe alsjeblieft die rollen stil!' },
+      { who: 'senior', text: 'junior duwt de koker, ik hou je vast.' },
+    ],
+  },
+  {
+    id: 4,
+    key: 'rescue',
+    title: 'scène 4 · reddingsactie',
+    subtitle: 'samen trekken en duwen tot hij loskomt',
+    lines: [
+      { who: 'senior', text: 'noodstop! noodstop op de pakstraat!' },
+      { who: 'junior', text: 'koker wijkt! pak zijn arm vast packman!' },
+      { who: 'operator', text: 'trek! trek! ik voel hem loskomen!' },
+      { who: 'junior', text: 'één… twee… drie… nu trekken!' },
+    ],
+  },
+  {
+    id: 5,
+    key: 'free',
+    title: 'scène 5 · vrij en gered',
+    subtitle: 'operator is los — crew viert de redding',
+    lines: [
+      { who: 'operator', text: 'ik ben vrij! dankjewel packman en junior!' },
+      { who: 'senior', text: 'yes! goed gedaan junior, top teamwerk!' },
+      { who: 'junior', text: 'pfoeh, dat was op het nippertje!' },
+      { who: 'senior', text: 'voortaan schoenen ver van de kokers houden!' },
+    ],
+  },
 ]
+
+const STUCK_MS = STUCK_SCENES.length * STUCK_SCENE_MS
 
 const SPEAKER_LABEL = {
   senior: 'packman',
@@ -186,59 +238,110 @@ function ShoeTrigger({ onClick, disabled }) {
   )
 }
 
-function StuckUnderRollers({ line }) {
+function StuckHelper({ variant, pose }) {
+  return (
+    <div className={`stuck-helper stuck-helper--${variant} stuck-helper--${pose}`} title={variant === 'senior' ? 'packman' : 'packman junior'}>
+      <div className="stuck-helper-body">
+        <div className="stuck-helper-eye" />
+        <div className="stuck-helper-mouth" />
+      </div>
+      <span className="stuck-helper-name">{variant === 'senior' ? 'packman' : 'junior'}</span>
+    </div>
+  )
+}
+
+function StuckUnderRollers({ line, scene }) {
+  const active = scene || STUCK_SCENES[0]
   const speaker = line ? SPEAKER_LABEL[line.who] || line.who : '…'
   const text = line?.text || 'laden…'
+  const sceneKey = active.key
 
   return (
-    <div className="stuck-show" role="group" aria-label="operator vast onder de kokers">
+    <div
+      className={`stuck-show stuck-show--${sceneKey}`}
+      role="group"
+      aria-label="operator vast onder de kokers — packman crew helpt"
+    >
       <div className="stuck-show-bg" aria-hidden="true" />
-      <div className="stuck-rollers stuck-rollers--persist" aria-hidden="true">
-        <span className="stuck-koker stuck-koker--a" />
-        <span className="stuck-koker stuck-koker--b" />
-        <span className="stuck-koker stuck-koker--c" />
-      </div>
-      <div className="stuck-operator stuck-operator--persist" aria-hidden="true">
-        <div className="stuck-op-head" />
-        <div className="stuck-op-body" />
-        <div className="stuck-op-legs">
-          <span className="stuck-op-leg stuck-op-leg--free" />
-          <span className="stuck-op-leg stuck-op-leg--caught">
-            <i className="stuck-shoe" />
+
+      <div className="stuck-scene-rail" aria-hidden="true">
+        {STUCK_SCENES.map((s) => (
+          <span
+            key={s.id}
+            className={`stuck-scene-dot ${s.id === active.id ? 'stuck-scene-dot--on' : ''} ${s.id < active.id ? 'stuck-scene-dot--done' : ''}`}
+          >
+            {s.id}
           </span>
-        </div>
-        <div className="stuck-op-arms">
-          <span /><span />
-        </div>
+        ))}
       </div>
-      <div className="stuck-scenes" aria-hidden="true">
-        {/* scene 1: walk + catch */}
-        <div className="stuck-scene stuck-scene--walk">
-          <p className="stuck-scene-tag">scène 1 · schoen klem</p>
+
+      <div className="stuck-stage" aria-hidden="true">
+        <div className="stuck-rollers">
+          <span className="stuck-koker stuck-koker--a" />
+          <span className="stuck-koker stuck-koker--b" />
+          <span className="stuck-koker stuck-koker--c" />
         </div>
 
-        {/* scene 2: thrash / panic */}
-        <div className="stuck-scene stuck-scene--panic">
+        <div className={`stuck-operator stuck-operator--${sceneKey}`}>
+          <div className="stuck-op-head" />
+          <div className="stuck-op-body" />
+          <div className="stuck-op-legs">
+            <span className="stuck-op-leg stuck-op-leg--free" />
+            <span className="stuck-op-leg stuck-op-leg--caught">
+              <i className="stuck-shoe" />
+            </span>
+          </div>
+          <div className="stuck-op-arms">
+            <span /><span />
+          </div>
+          <span className="stuck-op-label">operator</span>
+        </div>
+
+        {/* scene 1 visuals */}
+        <div className={`stuck-layer ${sceneKey === 'trap' ? 'stuck-layer--on' : ''}`}>
+          <p className="stuck-big-cry stuck-big-cry--soft">HELP!</p>
+          <div className="stuck-sparks"><i /><i /><i /><i /></div>
+        </div>
+
+        {/* scene 2: crew arrives running */}
+        <div className={`stuck-layer ${sceneKey === 'arrive' ? 'stuck-layer--on' : ''}`}>
           <div className="stuck-alarm" />
-          <div className="stuck-sparks"><i /><i /><i /><i /><i /><i /></div>
+          <StuckHelper variant="senior" pose="run" />
+          <StuckHelper variant="junior" pose="run" />
           <p className="stuck-big-cry">HELP!</p>
-          <p className="stuck-scene-tag">scène 2 · vast onder kokers</p>
         </div>
 
-        {/* scene 3: helpers arrive */}
-        <div className="stuck-scene stuck-scene--rescue">
-          <div className="stuck-helper stuck-helper--senior" title="packman" />
-          <div className="stuck-helper stuck-helper--junior" title="junior" />
+        {/* scene 3: inspect / talk */}
+        <div className={`stuck-layer ${sceneKey === 'inspect' ? 'stuck-layer--on' : ''}`}>
+          <StuckHelper variant="senior" pose="talk" />
+          <StuckHelper variant="junior" pose="inspect" />
+          <div className="stuck-inspect-beam" />
+          <p className="stuck-plan-bubble">plan: koker duwen</p>
+        </div>
+
+        {/* scene 4: rescue pull */}
+        <div className={`stuck-layer ${sceneKey === 'rescue' ? 'stuck-layer--on' : ''}`}>
+          <StuckHelper variant="senior" pose="pull" />
+          <StuckHelper variant="junior" pose="push" />
           <div className="stuck-pull-line" />
-          <p className="stuck-scene-tag">scène 3 · reddingsactie</p>
+          <div className="stuck-force-arrows"><span /><span /><span /></div>
+          <p className="stuck-count-banner">1 · 2 · 3 · NU!</p>
         </div>
 
-        {/* scene 4: free */}
-        <div className="stuck-scene stuck-scene--free">
+        {/* scene 5: free + celebrate */}
+        <div className={`stuck-layer ${sceneKey === 'free' ? 'stuck-layer--on' : ''}`}>
+          <StuckHelper variant="senior" pose="cheer" />
+          <StuckHelper variant="junior" pose="cheer" />
           <div className="stuck-free-op" />
           <p className="stuck-free-banner">vrij!</p>
-          <p className="stuck-scene-tag">scène 4 · gered</p>
+          <div className="stuck-confetti"><i /><i /><i /><i /><i /><i /><i /><i /></div>
         </div>
+      </div>
+
+      <div className="stuck-scene-header">
+        <p className="stuck-show-title">noodgeval · vast onder de kokers</p>
+        <p className="stuck-scene-tag">{active.title}</p>
+        <p className="stuck-scene-sub">{active.subtitle}</p>
       </div>
 
       <div className="stuck-caption-board" aria-live="assertive">
@@ -249,9 +352,11 @@ function StuckUnderRollers({ line }) {
       </div>
 
       <div className="stuck-progress" aria-hidden="true">
-        <div className="stuck-progress-bar" />
+        <div
+          className="stuck-progress-bar stuck-progress-bar--manual"
+          style={{ width: `${(active.id / STUCK_SCENES.length) * 100}%` }}
+        />
       </div>
-      <p className="stuck-show-title">noodgeval · vast onder de kokers</p>
     </div>
   )
 }
@@ -464,6 +569,7 @@ function AndresPakstraatAnimation({ onComplete }) {
   const [footShow, setFootShow] = useState(false)
   const [stuckShow, setStuckShow] = useState(false)
   const [stuckLine, setStuckLine] = useState(null)
+  const [stuckScene, setStuckScene] = useState(STUCK_SCENES[0])
   const [shake, setShake] = useState(false)
   const chatAlive = useRef(true)
   const stuckAlive = useRef(false)
@@ -555,32 +661,57 @@ function AndresPakstraatAnimation({ onComplete }) {
     }
   }, [boot, yeet, footShow, stuckShow])
 
-  // stuck-under-rollers dialogue + 30s lifecycle
+  // stuck-under-rollers: 5 connected scenes, each at least 10s, with crew dialogue
   useEffect(() => {
     if (!stuckShow) return undefined
 
     stuckAlive.current = true
-    stopStuckSound.current = playStuckSoundtrack()
+    stopStuckSound.current = playStuckSoundtrack(STUCK_MS / 1000)
+    let finished = false
+
+    const wait = (ms) => new Promise((r) => window.setTimeout(r, ms))
+
+    const finishShow = () => {
+      if (finished || !stuckAlive.current) return
+      finished = true
+      setPhase('outro')
+      window.setTimeout(() => onComplete?.(), 900)
+    }
 
     const run = async () => {
-      for (const line of STUCK_SCRIPT) {
+      for (const scene of STUCK_SCENES) {
         if (!stuckAlive.current) break
-        setStuckLine(line)
-        await shoutPackmanLine(line.text, line.who)
-        if (!stuckAlive.current) break
-        await new Promise((r) => window.setTimeout(r, 550))
+        setStuckScene(scene)
+        setStatus(`scène ${scene.id}/${STUCK_SCENES.length} · crew helpt`)
+        const startedAt = Date.now()
+
+        for (const line of scene.lines) {
+          if (!stuckAlive.current) break
+          setStuckLine(line)
+          await shoutPackmanLine(line.text, line.who)
+          if (!stuckAlive.current) break
+          await wait(STUCK_LINE_GAP_MS)
+        }
+
+        // elke scène blijft minimaal 10s staan, daarna soft door naar de volgende
+        const elapsed = Date.now() - startedAt
+        const remain = STUCK_SCENE_MS - elapsed
+        if (stuckAlive.current && remain > 0) {
+          await wait(remain)
+        }
       }
+
+      finishShow()
     }
 
     run()
 
-    const outro = window.setTimeout(() => setPhase('outro'), STUCK_MS - 900)
-    const done = window.setTimeout(() => onComplete?.(), STUCK_MS)
+    // safety only — scenes themselves gate the real end
+    const hardStop = window.setTimeout(finishShow, STUCK_SCENES.length * 22000)
 
     return () => {
       stuckAlive.current = false
-      window.clearTimeout(outro)
-      window.clearTimeout(done)
+      window.clearTimeout(hardStop)
       stopPackmanVoice()
       stopStuckSound.current?.()
     }
@@ -667,7 +798,7 @@ function AndresPakstraatAnimation({ onComplete }) {
       <FactoryExtras />
       {yeet && <div className="fx-yeet-flash" aria-hidden="true" />}
       {footShow && <GiantFootCircus />}
-      {stuckShow && <StuckUnderRollers line={stuckLine} />}
+      {stuckShow && <StuckUnderRollers line={stuckLine} scene={stuckScene} />}
 
       <ShoeTrigger onClick={handleShoeClick} disabled={busy} />
       <PackmanMiniGame />
