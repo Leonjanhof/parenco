@@ -17,35 +17,66 @@ const STATUS_TICKER = [
   'klaar voor verzenden!',
 ]
 
-/** continuous back-and-forth — loops the whole 30s */
-const PACKMAN_CHAT = [
-  { who: 'senior', text: 'pack pack!' },
-  { who: 'junior', text: 'even een plasje plegen' },
-  { who: 'senior', text: 'serieus junior?!' },
-  { who: 'junior', text: 'oké… pack pack!' },
-  { who: 'senior', text: 'meten die handel' },
-  { who: 'junior', text: 'ik vang hem wel' },
-  { who: 'senior', text: 'papier eromheen!' },
-  { who: 'junior', text: 'pack pack pack!' },
-  { who: 'senior', text: 'plasje later, eerst wrap' },
-  { who: 'junior', text: 'aye aye packman!' },
-  { who: 'senior', text: 'uitstoter nu!' },
-  { who: 'junior', text: 'ik moet écht even' },
-  { who: 'senior', text: 'nee, eerst packen' },
-  { who: 'junior', text: 'pack pack… en dan plasje' },
-  { who: 'senior', text: 'breedte check!' },
-  { who: 'junior', text: 'oogje op de rol' },
-  { who: 'senior', text: 'go go junior!' },
-  { who: 'junior', text: 'ik ren al!' },
-  { who: 'senior', text: 'opvanger ready?' },
-  { who: 'junior', text: 'locked and loaded' },
-  { who: 'senior', text: 'wikkel die rol!' },
-  { who: 'junior', text: 'papier papier papier!' },
-  { who: 'senior', text: 'pack pack forever' },
-  { who: 'junior', text: 'even een plasje plegen?' },
-  { who: 'senior', text: 'na de confetti!' },
-  { who: 'junior', text: 'deal, pack pack!' },
+/** packman complains / calls out — junior always answers */
+const PACKMAN_LINES = [
+  'plasje plegen',
+  'weer een dag geen rust',
+  'nog steeds geen koffie gehad',
+  'pack pack!',
+  'mijn rug kraakt al',
+  'wanneer is pauze?',
+  'die rol is te dik',
+  'uitstoter doet raar',
+  'ik heb honger',
+  'weer overtime vandaag',
+  'junior, schiet op!',
+  'papier is op!',
+  'meten meten meten',
+  'waarom zo vroeg?',
+  'koffie koffie koffie',
+  'even zitten mag niet',
+  'packstraat never sleeps',
+  'nog één rol… beloofd',
 ]
+
+const JUNIOR_REACTIONS = [
+  'haha classic packman',
+  'ik voel je bro',
+  'eerst packen dan plasje',
+  'koffie komt zo!',
+  'pack pack junior ready',
+  'ik vang hem wel',
+  'rust later, wrap nu',
+  'aye aye packman!',
+  'zelfde hier eerlijk',
+  'blijf sterk!',
+  'ik ren al!',
+  'papier erbij!',
+  'pauze? droom door',
+  'wij regelen dit',
+  'nog even doorbijten',
+  'pack pack pack!',
+  'jij bent de boss',
+  'ik luister, ik doe',
+]
+
+function pickRandom(list, avoid) {
+  if (list.length === 1) return list[0]
+  let next = list[Math.floor(Math.random() * list.length)]
+  let guard = 0
+  while (next === avoid && guard < 8) {
+    next = list[Math.floor(Math.random() * list.length)]
+    guard += 1
+  }
+  return next
+}
+
+function nextChatLine(prev) {
+  if (!prev || prev.who === 'junior') {
+    return { who: 'senior', text: pickRandom(PACKMAN_LINES, prev?.text) }
+  }
+  return { who: 'junior', text: pickRandom(JUNIOR_REACTIONS, prev?.text) }
+}
 
 function PackmanFigure({ name, variant, bubble, talking }) {
   return (
@@ -201,7 +232,7 @@ function ControlHud({ status }) {
 function AndresPakstraatAnimation({ onComplete }) {
   const [phase, setPhase] = useState('playing')
   const [status, setStatus] = useState(STATUS_TICKER[0])
-  const [chatIndex, setChatIndex] = useState(0)
+  const [chatLine, setChatLine] = useState(() => nextChatLine(null))
 
   useEffect(() => {
     let stopSound = () => {}
@@ -227,7 +258,7 @@ function AndresPakstraatAnimation({ onComplete }) {
     )
 
     const chatTimer = window.setInterval(() => {
-      setChatIndex((i) => (i + 1) % PACKMAN_CHAT.length)
+      setChatLine((prev) => nextChatLine(prev))
     }, CHAT_MS)
 
     const doneTimer = window.setTimeout(() => setPhase('outro'), ANIMATION_MS - 900)
@@ -247,11 +278,9 @@ function AndresPakstraatAnimation({ onComplete }) {
   }, [])
 
   useEffect(() => {
-    const line = PACKMAN_CHAT[chatIndex]
-    shoutPackmanLine(line.text, line.who)
-  }, [chatIndex])
+    shoutPackmanLine(chatLine.text, chatLine.who)
+  }, [chatLine])
 
-  const chatLine = PACKMAN_CHAT[chatIndex]
   const seniorLine = chatLine.who === 'senior' ? chatLine.text : '…'
   const juniorLine = chatLine.who === 'junior' ? chatLine.text : '…'
   const seniorTalking = chatLine.who === 'senior'
