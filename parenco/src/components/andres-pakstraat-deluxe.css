@@ -1282,10 +1282,10 @@
 }
 
 @keyframes junior-yeet {
-  0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
-  20% { transform: translate(-20px, -40px) rotate(-25deg) scale(1.15); }
-  55% { transform: translate(120px, -180px) rotate(220deg) scale(1.05); }
-  100% { transform: translate(420px, -60px) rotate(720deg) scale(0.4); opacity: 0; }
+  0% { transform: translate3d(0, 0, 0) rotate(0) scale(1); opacity: 1; }
+  20% { transform: translate3d(-20px, -40px, 30px) rotate(-25deg) scale(1.15); }
+  55% { transform: translate3d(120px, -180px, 70px) rotate(220deg) scale(1.05); }
+  100% { transform: translate3d(420px, -60px, -10px) rotate(720deg) scale(0.4); opacity: 0; }
 }
 
 .andres-stage--shake {
@@ -1332,226 +1332,373 @@
   animation: badges-in 0.5s ease-out both;
 }
 
-/* ========== factory robots ========== */
+/* ========== 3D orange 6-axis robots ========== */
 
-.pak-robot {
+.arm6 {
+  --arm-orange: #f97316;
+  --arm-orange-deep: #c2410c;
+  --arm-orange-hi: #fdba74;
+  --arm-metal: #1e293b;
   position: absolute;
-  z-index: 12;
-  width: 48px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  z-index: 14;
+  width: 110px;
+  height: 140px;
   pointer-events: none;
+  perspective: 600px;
 }
 
-.pak-robot--alpha {
-  left: 35%;
-  bottom: 6%;
-  animation: robot-patrol-a 30s ease-in-out both;
-}
+.arm6--alpha { left: 28%; bottom: 2%; }
+.arm6--beta { left: 52%; bottom: 0; transform: scale(0.92); }
+.arm6--gamma { left: 74%; bottom: 3%; transform: scale(0.88) scaleX(-1); }
 
-.pak-robot--beta {
-  left: 62%;
-  bottom: 10%;
-  animation: robot-patrol-b 30s ease-in-out both;
-  transform: scale(0.9);
-}
-
-.pak-robot--gamma {
-  left: 78%;
-  bottom: 4%;
-  animation: robot-patrol-c 30s ease-in-out both;
-  transform: scale(1.05);
-}
-
-.pak-robot--throw {
-  animation: robot-throw 1.4s cubic-bezier(0.2, 0.7, 0.3, 1) forwards !important;
-  z-index: 28;
-}
-
-.pak-robot--cheer {
-  animation: robot-cheer 1.2s ease-in-out infinite !important;
-}
-
-.pak-robot--chase {
-  animation: robot-chase 1.4s ease-in forwards !important;
-}
-
-.pak-robot-antenna {
-  width: 3px;
-  height: 10px;
-  background: #B8E6FF;
+.arm6-scene {
   position: relative;
+  width: 100%;
+  height: 120px;
+  transform-style: preserve-3d;
+  transform: rotateX(12deg) rotateY(-18deg);
 }
 
-.pak-robot-antenna::after {
-  content: '';
+.arm6-base {
   position: absolute;
-  top: -5px;
   left: 50%;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #ff5a7a;
-  transform: translateX(-50%);
-  box-shadow: 0 0 8px #ff5a7a;
-  animation: soft-pulse 0.7s ease-in-out infinite;
+  bottom: 8px;
+  width: 42px;
+  height: 16px;
+  margin-left: -21px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #334155, var(--arm-metal));
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+  transform-style: preserve-3d;
 }
 
-.pak-robot-head {
+.arm6-base-ring {
+  position: absolute;
+  left: 50%;
+  top: -6px;
   width: 28px;
-  height: 20px;
-  border-radius: 6px 6px 3px 3px;
-  background: linear-gradient(180deg, #B8E6FF, #0057A8);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 0 4px;
-  box-shadow: 0 0 12px rgba(8, 178, 255, 0.45);
-}
-
-.pak-robot-eye {
-  width: 5px;
-  height: 5px;
+  height: 10px;
+  margin-left: -14px;
   border-radius: 50%;
-  background: #ffd24a;
-  box-shadow: 0 0 6px #ffd24a;
+  background: radial-gradient(circle at 40% 35%, var(--arm-orange-hi), var(--arm-orange) 55%, var(--arm-orange-deep));
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.2), 0 0 12px rgba(249, 115, 22, 0.45);
 }
 
-.pak-robot-body {
-  width: 32px;
-  height: 26px;
-  margin-top: 2px;
-  border-radius: 4px;
-  background: linear-gradient(180deg, #08B2FF, #00205B);
-  position: relative;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+.arm6-j {
+  position: absolute;
+  transform-style: preserve-3d;
+  transform-origin: center bottom;
 }
 
-.pak-robot-core {
+.arm6-joint-cap {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: #ffd24a;
-  animation: soft-pulse 0.9s ease-in-out infinite;
-}
-
-.pak-robot-arm {
-  position: absolute;
-  top: 28px;
+  bottom: -4px;
   width: 16px;
-  height: 5px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--arm-orange-hi), var(--arm-orange) 50%, var(--arm-orange-deep));
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), inset -2px -2px 4px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+.arm6-joint-cap--sm {
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+}
+
+.arm6-link {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  border-radius: 7px;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 30%, transparent 70%, rgba(255, 255, 255, 0.2)),
+    linear-gradient(180deg, var(--arm-orange-hi), var(--arm-orange) 40%, var(--arm-orange-deep));
+  box-shadow: 3px 4px 10px rgba(0, 0, 0, 0.35);
+  transform-origin: bottom center;
+  transform-style: preserve-3d;
+}
+
+.arm6-link1 {
+  width: 18px;
+  height: 36px;
+  margin-left: -9px;
+}
+
+.arm6-link2 {
+  width: 15px;
+  height: 42px;
+  margin-left: -7.5px;
+}
+
+.arm6-link3 {
+  width: 12px;
+  height: 28px;
+  margin-left: -6px;
+}
+
+.arm6-j1 {
+  left: 50%;
+  bottom: 10px;
+  width: 0;
+  height: 0;
+}
+
+.arm6-j2 {
+  left: 50%;
+  top: -4px;
+  width: 0;
+  height: 0;
+}
+
+.arm6-j3 {
+  left: 50%;
+  top: -4px;
+  width: 0;
+  height: 0;
+}
+
+.arm6-j4 {
+  left: 50%;
+  top: -2px;
+  width: 0;
+  height: 0;
+}
+
+.arm6-j5 {
+  left: 0;
+  top: -10px;
+  width: 0;
+  height: 0;
+}
+
+.arm6-j6 {
+  left: 0;
+  top: -8px;
+  width: 0;
+  height: 0;
+}
+
+.arm6-wrist {
+  position: absolute;
+  left: -7px;
+  top: -6px;
+  width: 14px;
+  height: 10px;
   border-radius: 3px;
-  background: #B8E6FF;
+  background: linear-gradient(180deg, var(--arm-orange-hi), var(--arm-orange-deep));
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-.pak-robot-arm--l {
-  left: -8px;
-  transform-origin: right center;
-  animation: robot-arm-l 0.6s ease-in-out infinite alternate;
+.arm6-gripper {
+  position: absolute;
+  left: -9px;
+  top: -18px;
+  width: 18px;
+  height: 14px;
 }
 
-.pak-robot-arm--r {
-  right: -8px;
-  transform-origin: left center;
-  animation: robot-arm-r 0.6s ease-in-out infinite alternate;
-}
-
-.pak-robot--throw .pak-robot-arm--r {
-  animation: robot-arm-yeet 0.5s ease-out forwards;
-}
-
-@keyframes robot-arm-l {
-  from { transform: rotate(20deg); }
-  to { transform: rotate(-25deg); }
-}
-
-@keyframes robot-arm-r {
-  from { transform: rotate(-15deg); }
-  to { transform: rotate(30deg); }
-}
-
-@keyframes robot-arm-yeet {
-  0% { transform: rotate(-20deg); }
-  40% { transform: rotate(-110deg) scaleX(1.2); }
-  100% { transform: rotate(40deg); }
-}
-
-.pak-robot-legs {
-  display: flex;
-  gap: 8px;
-  margin-top: 2px;
-}
-
-.pak-robot-legs span {
-  width: 7px;
-  height: 12px;
+.arm6-claw {
+  position: absolute;
+  top: 0;
+  width: 5px;
+  height: 14px;
   border-radius: 2px;
-  background: #00307A;
-  animation: packman-walk 0.35s ease-in-out infinite alternate;
+  background: linear-gradient(180deg, #fb923c, #9a3412);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  transform-origin: top center;
 }
 
-.pak-robot-legs span:last-child {
-  animation-delay: 0.18s;
+.arm6-claw--l { left: 1px; }
+.arm6-claw--r { right: 1px; }
+
+.arm6-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 50px;
+  height: 10px;
+  margin-left: -25px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  filter: blur(4px);
 }
 
-.pak-robot-tag {
-  margin-top: 3px;
-  font-size: 0.48rem;
-  letter-spacing: 0.05em;
-  color: rgba(184, 230, 255, 0.8);
+.arm6-tag {
+  display: block;
+  margin-top: 2px;
+  text-align: center;
   font-family: Figtree, sans-serif;
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  color: #fdba74;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
-@keyframes robot-patrol-a {
-  0%, 12% { opacity: 0; transform: translateX(-40px); }
-  18% { opacity: 1; transform: translateX(0); }
-  40% { transform: translateX(50px); }
-  60% { transform: translateX(10px) translateY(-8px); }
-  80% { transform: translateX(70px); }
-  92%, 100% { opacity: 0.85; transform: translateX(20px); }
+/* work cycle — all 6 axes moving */
+.arm6--work .arm6-j1 { animation: a6-j1 4.2s ease-in-out infinite; }
+.arm6--work .arm6-j2 { animation: a6-j2 3.4s ease-in-out infinite; }
+.arm6--work .arm6-j3 { animation: a6-j3 2.8s ease-in-out infinite; }
+.arm6--work .arm6-j4 { animation: a6-j4 2.2s linear infinite; }
+.arm6--work .arm6-j5 { animation: a6-j5 2.6s ease-in-out infinite; }
+.arm6--work .arm6-j6 { animation: a6-j6 1.8s ease-in-out infinite; }
+.arm6--work .arm6-claw--l { animation: a6-claw-l 1.4s ease-in-out infinite; }
+.arm6--work .arm6-claw--r { animation: a6-claw-r 1.4s ease-in-out infinite; }
+
+.arm6--beta.arm6--work .arm6-j1 { animation-duration: 5s; animation-delay: -1s; }
+.arm6--beta.arm6--work .arm6-j2 { animation-duration: 3.8s; animation-delay: -0.6s; }
+.arm6--gamma.arm6--work .arm6-j1 { animation-duration: 3.6s; animation-delay: -1.4s; }
+.arm6--gamma.arm6--work .arm6-j3 { animation-duration: 2.4s; animation-delay: -0.8s; }
+
+.arm6--alpha { animation: arm6-enter-a 30s ease-in-out both; }
+.arm6--beta { animation: arm6-enter-b 30s ease-in-out both; }
+.arm6--gamma { animation: arm6-enter-c 30s ease-in-out both; }
+
+@keyframes a6-j1 {
+  0%, 100% { transform: rotateY(-25deg); }
+  50% { transform: rotateY(35deg); }
 }
 
-@keyframes robot-patrol-b {
-  0%, 14% { opacity: 0; transform: scale(0.9) translateX(30px); }
-  22% { opacity: 1; transform: scale(0.9) translateX(0); }
-  45% { transform: scale(0.9) translateX(-40px); }
-  70% { transform: scale(0.9) translateX(20px) translateY(-6px); }
-  100% { opacity: 0.9; transform: scale(0.9) translateX(-10px); }
+@keyframes a6-j2 {
+  0%, 100% { transform: rotateZ(-18deg) rotateX(8deg); }
+  50% { transform: rotateZ(28deg) rotateX(-6deg); }
 }
 
-@keyframes robot-patrol-c {
-  0%, 16% { opacity: 0; transform: scale(1.05) translateY(20px); }
-  24% { opacity: 1; transform: scale(1.05) translateY(0); }
-  50% { transform: scale(1.05) translateX(-30px); }
-  75% { transform: scale(1.05) translateX(15px); }
-  100% { opacity: 0.9; transform: scale(1.05) translateX(-5px); }
+@keyframes a6-j3 {
+  0%, 100% { transform: rotateZ(40deg); }
+  50% { transform: rotateZ(-15deg); }
 }
 
-@keyframes robot-throw {
-  0% { left: 35%; bottom: 6%; transform: scale(1); }
-  25% { left: 55%; bottom: 14%; transform: scale(1.15); }
-  45% { left: 68%; bottom: 28%; transform: scale(1.2) rotate(-8deg); }
-  70% { left: 75%; bottom: 18%; transform: scale(1.1) rotate(12deg); }
-  100% { left: 82%; bottom: 8%; transform: scale(1) rotate(0); }
+@keyframes a6-j4 {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
 }
 
-@keyframes robot-cheer {
-  0%, 100% { transform: scale(0.9) translateY(0); }
-  50% { transform: scale(0.95) translateY(-12px); }
+@keyframes a6-j5 {
+  0%, 100% { transform: rotateZ(-20deg); }
+  50% { transform: rotateZ(25deg); }
 }
 
-@keyframes robot-chase {
-  0% { left: 78%; bottom: 4%; }
-  100% { left: 110%; bottom: 30%; opacity: 0; transform: scale(1.2) rotate(20deg); }
+@keyframes a6-j6 {
+  0%, 100% { transform: rotateY(-30deg); }
+  50% { transform: rotateY(40deg); }
+}
+
+@keyframes a6-claw-l {
+  0%, 100% { transform: rotate(-18deg); }
+  50% { transform: rotate(8deg); }
+}
+
+@keyframes a6-claw-r {
+  0%, 100% { transform: rotate(18deg); }
+  50% { transform: rotate(-8deg); }
+}
+
+@keyframes arm6-enter-a {
+  0%, 10% { opacity: 0; transform: translateY(24px); }
+  16%, 100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes arm6-enter-b {
+  0%, 12% { opacity: 0; transform: scale(0.92) translateY(20px); }
+  20%, 100% { opacity: 1; transform: scale(0.92) translateY(0); }
+}
+
+@keyframes arm6-enter-c {
+  0%, 14% { opacity: 0; transform: scale(0.88) scaleX(-1) translateY(18px); }
+  22%, 100% { opacity: 1; transform: scale(0.88) scaleX(-1) translateY(0); }
+}
+
+/* easter egg: throw mode — dramatic 6-axis yeet pose */
+.arm6--throw {
+  z-index: 32 !important;
+  animation: arm6-throw-move 1.5s cubic-bezier(0.2, 0.75, 0.25, 1) forwards !important;
+}
+
+.arm6--throw .arm6-j1 { animation: a6-throw-j1 1.5s ease-out forwards !important; }
+.arm6--throw .arm6-j2 { animation: a6-throw-j2 1.5s ease-out forwards !important; }
+.arm6--throw .arm6-j3 { animation: a6-throw-j3 1.5s ease-out forwards !important; }
+.arm6--throw .arm6-j4 { animation: a6-throw-j4 1.5s linear forwards !important; }
+.arm6--throw .arm6-j5 { animation: a6-throw-j5 1.5s ease-out forwards !important; }
+.arm6--throw .arm6-j6 { animation: a6-throw-j6 1.5s ease-out forwards !important; }
+.arm6--throw .arm6-claw--l { animation: a6-throw-claw-l 1.5s ease-out forwards !important; }
+.arm6--throw .arm6-claw--r { animation: a6-throw-claw-r 1.5s ease-out forwards !important; }
+
+.arm6--spot .arm6-j1 { animation: a6-j1 1.2s ease-in-out infinite !important; }
+.arm6--spot .arm6-j2 { animation: a6-throw-j2 1.5s ease-out forwards !important; }
+
+.arm6--wave .arm6-j2 { animation: a6-j2 0.7s ease-in-out infinite !important; }
+.arm6--wave .arm6-j5 { animation: a6-j5 0.55s ease-in-out infinite !important; }
+
+@keyframes arm6-throw-move {
+  0% { left: 28%; bottom: 2%; }
+  35% { left: 48%; bottom: 8%; }
+  100% { left: 62%; bottom: 12%; }
+}
+
+@keyframes a6-throw-j1 {
+  0% { transform: rotateY(0); }
+  40% { transform: rotateY(50deg); }
+  100% { transform: rotateY(-10deg); }
+}
+
+@keyframes a6-throw-j2 {
+  0% { transform: rotateZ(10deg); }
+  35% { transform: rotateZ(-50deg); }
+  70% { transform: rotateZ(55deg); }
+  100% { transform: rotateZ(20deg); }
+}
+
+@keyframes a6-throw-j3 {
+  0% { transform: rotateZ(20deg); }
+  40% { transform: rotateZ(-40deg); }
+  100% { transform: rotateZ(60deg); }
+}
+
+@keyframes a6-throw-j4 {
+  0% { transform: rotateY(0); }
+  100% { transform: rotateY(540deg); }
+}
+
+@keyframes a6-throw-j5 {
+  0% { transform: rotateZ(0); }
+  50% { transform: rotateZ(-35deg); }
+  100% { transform: rotateZ(25deg); }
+}
+
+@keyframes a6-throw-j6 {
+  0% { transform: rotateY(0); }
+  100% { transform: rotateY(180deg); }
+}
+
+@keyframes a6-throw-claw-l {
+  0%, 45% { transform: rotate(10deg); }
+  55% { transform: rotate(-25deg); }
+  100% { transform: rotate(20deg); }
+}
+
+@keyframes a6-throw-claw-r {
+  0%, 45% { transform: rotate(-10deg); }
+  55% { transform: rotate(25deg); }
+  100% { transform: rotate(-20deg); }
 }
 
 .andres-stage--yeet .packman--senior {
   animation: packman-senior-work 30s ease-in-out both, packman-laugh 0.35s ease-in-out infinite;
+}
+
+.andres-stage--yeet .packman--yeeted {
+  animation: junior-yeet-3d 1.55s cubic-bezier(0.15, 0.85, 0.3, 1) forwards !important;
+}
+
+@keyframes junior-yeet-3d {
+  0% { transform: translate3d(0, 0, 0) rotate(0) scale(1); opacity: 1; filter: none; }
+  18% { transform: translate3d(-10px, -50px, 40px) rotate(-30deg) scale(1.2); }
+  45% { transform: translate3d(80px, -200px, 80px) rotate(200deg) scale(1.1); filter: brightness(1.3); }
+  100% { transform: translate3d(460px, -40px, -20px) rotate(780deg) scale(0.25); opacity: 0; filter: blur(1px); }
 }
 
 @keyframes packman-laugh {
@@ -1560,8 +1707,13 @@
 }
 
 @media (max-width: 640px) {
-  .pak-robot--beta {
+  .arm6--beta {
     display: none;
+  }
+
+  .arm6 {
+    width: 88px;
+    height: 120px;
   }
 
   .packman-hint {
