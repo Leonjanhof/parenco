@@ -1,4 +1,4 @@
-/* andre's pakstraat — 20s intro sequence */
+/* andre's pakstraat — 30s intro sequence */
 
 .andres-stage {
   position: fixed;
@@ -42,7 +42,7 @@
   z-index: 5;
   text-align: center;
   padding: 0 min(220px, 24vw) 0 1.25rem;
-  animation: andres-title-life 20s ease-in-out both;
+  animation: andres-title-life 30s ease-in-out both;
 }
 
 .andres-eyebrow {
@@ -107,7 +107,7 @@
       rgba(8, 178, 255, 0.22) 0 14px,
       rgba(184, 230, 255, 0.08) 14px 28px
     );
-  animation: andres-belt 20s linear both;
+  animation: andres-belt 30s linear both;
 }
 
 .andres-rail-legs {
@@ -134,7 +134,7 @@
   bottom: 28%;
   width: 88px;
   height: 88px;
-  animation: andres-roll-journey 20s cubic-bezier(0.45, 0.05, 0.25, 1) both;
+  animation: andres-roll-journey 30s cubic-bezier(0.45, 0.05, 0.25, 1) both;
   z-index: 6;
 }
 
@@ -150,7 +150,7 @@
     inset 6px 6px 12px rgba(255, 255, 255, 0.45),
     0 8px 18px rgba(0, 0, 0, 0.28);
   overflow: hidden;
-  animation: andres-roll-spin 20s linear both;
+  animation: andres-roll-spin 30s linear both;
 }
 
 .andres-roll-rings {
@@ -193,7 +193,7 @@
   );
   box-shadow: inset 0 0 0 0 rgba(210, 180, 120, 0.65);
   opacity: 0;
-  animation: andres-wrap 20s ease-in-out both;
+  animation: andres-wrap 30s ease-in-out both;
   pointer-events: none;
 }
 
@@ -206,7 +206,7 @@
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.28);
   filter: blur(4px);
-  animation: andres-shadow-pulse 20s ease-in-out both;
+  animation: andres-shadow-pulse 30s ease-in-out both;
 }
 
 /* measuring pillars */
@@ -219,12 +219,12 @@
 
 .andres-pillar--left {
   left: 22%;
-  animation: andres-pillar-left 20s ease-in-out both;
+  animation: andres-pillar-left 30s ease-in-out both;
 }
 
 .andres-pillar--right {
   right: 38%;
-  animation: andres-pillar-right 20s ease-in-out both;
+  animation: andres-pillar-right 30s ease-in-out both;
 }
 
 .andres-pillar-stem {
@@ -257,7 +257,7 @@
   border-radius: 999px;
   background: linear-gradient(90deg, #08B2FF, rgba(184, 230, 255, 0.15));
   box-shadow: 0 0 12px rgba(8, 178, 255, 0.85);
-  animation: andres-beam 20s ease-in-out both;
+  animation: andres-beam 30s ease-in-out both;
   transform-origin: left center;
 }
 
@@ -276,26 +276,26 @@
   top: -36px;
   left: 50%;
   transform: translateX(-50%);
-  animation: andres-label-measure 20s ease-in-out both;
+  animation: andres-label-measure 30s ease-in-out both;
 }
 
 .andres-ejector .andres-station-label {
   bottom: -28px;
   left: 0;
-  animation: andres-label-eject 20s ease-in-out both;
+  animation: andres-label-eject 30s ease-in-out both;
 }
 
 .andres-catcher .andres-station-label {
   bottom: -28px;
   right: 0;
-  animation: andres-label-catch 20s ease-in-out both;
+  animation: andres-label-catch 30s ease-in-out both;
 }
 
 .andres-wrapper .andres-station-label {
   top: -26px;
   left: 50%;
   transform: translateX(-50%);
-  animation: andres-label-wrap 20s ease-in-out both;
+  animation: andres-label-wrap 30s ease-in-out both;
 }
 
 /* ejector */
@@ -306,7 +306,7 @@
   width: 110px;
   height: 34px;
   z-index: 7;
-  animation: andres-ejector 20s ease-in-out both;
+  animation: andres-ejector 30s ease-in-out both;
 }
 
 .andres-ejector-arm {
@@ -340,7 +340,7 @@
   width: 118px;
   height: 62px;
   z-index: 5;
-  animation: andres-catcher 20s ease-in-out both;
+  animation: andres-catcher 30s ease-in-out both;
 }
 
 .andres-catcher-cradle {
@@ -369,7 +369,7 @@
   border-radius: 8px;
   background: linear-gradient(180deg, #08B2FF, #00205B);
   transform-origin: bottom center;
-  animation: andres-catch-arms 20s ease-in-out both;
+  animation: andres-catch-arms 30s ease-in-out both;
 }
 
 .andres-catcher-arms span:last-child {
@@ -384,7 +384,7 @@
   width: 70px;
   height: 70px;
   z-index: 5;
-  animation: andres-wrapper-life 20s ease-in-out both;
+  animation: andres-wrapper-life 30s ease-in-out both;
 }
 
 .andres-paper-roll {
@@ -400,7 +400,7 @@
   box-shadow:
     inset 0 0 0 3px rgba(180, 150, 100, 0.35),
     0 6px 16px rgba(0, 0, 0, 0.28);
-  animation: andres-paper-spin 20s linear both;
+  animation: andres-paper-spin 30s linear both;
 }
 
 .andres-paper-core {
@@ -424,7 +424,7 @@
   background: linear-gradient(90deg, rgba(244, 239, 228, 0.95), rgba(232, 216, 184, 0.4));
   box-shadow: 0 0 8px rgba(255, 248, 230, 0.45);
   transform-origin: right center;
-  animation: andres-paper-feed 20s ease-in-out both;
+  animation: andres-paper-feed 30s ease-in-out both;
 }
 
 .andres-path-dots {
@@ -443,7 +443,7 @@
   border-radius: 50%;
   background: rgba(8, 178, 255, 0.55);
   opacity: 0;
-  animation: andres-dot 20s ease-in-out both;
+  animation: andres-dot 30s ease-in-out both;
 }
 
 .andres-path-dots i:nth-child(1) { animation-delay: 0s; }
@@ -472,7 +472,7 @@
   width: 0;
   border-radius: inherit;
   background: linear-gradient(90deg, #08B2FF, #B8E6FF);
-  animation: andres-progress 20s linear both;
+  animation: andres-progress 30s linear both;
 }
 
 /* curtains */
@@ -488,13 +488,13 @@
 .andres-curtain--left {
   left: 0;
   transform-origin: left center;
-  animation: andres-curtain-left 20s cubic-bezier(0.65, 0.05, 0.2, 1) both;
+  animation: andres-curtain-left 30s cubic-bezier(0.65, 0.05, 0.2, 1) both;
 }
 
 .andres-curtain--right {
   right: 0;
   transform-origin: right center;
-  animation: andres-curtain-right 20s cubic-bezier(0.65, 0.05, 0.2, 1) both;
+  animation: andres-curtain-right 30s cubic-bezier(0.65, 0.05, 0.2, 1) both;
 }
 
 .andres-curtain-folds {
@@ -534,16 +534,16 @@
   z-index: 22;
   background: linear-gradient(180deg, #B8E6FF, #08B2FF 40%, #0057A8);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-  animation: andres-rod 20s ease-in-out both;
+  animation: andres-rod 30s ease-in-out both;
 }
 
-/* ========== keyframes (20s timeline) ==========
+/* ========== keyframes (30s timeline) ==========
    0–2.5s   curtains closed + title
    2.5–4.5s curtains open
    4.5–7.5s roll enters, pillars measure width
    7.5–11s  ejector pushes, catcher receives
    11–16.5s wrapping with paper
-   16.5–20s exit + soft close
+   26–30s exit + soft close
 */
 
 @keyframes andres-stage-in {
@@ -843,14 +843,14 @@
 .packman--senior {
   left: 10%;
   bottom: 8%;
-  animation: packman-senior-work 20s ease-in-out both;
+  animation: packman-senior-work 30s ease-in-out both;
 }
 
 .packman--junior {
   right: 12%;
   bottom: 10%;
   width: 42px;
-  animation: packman-junior-work 20s ease-in-out both;
+  animation: packman-junior-work 30s ease-in-out both;
 }
 
 .packman-body {
@@ -944,14 +944,14 @@
 
 .packman-arm--left {
   left: 2px;
-  animation: packman-arm-left 20s ease-in-out both;
+  animation: packman-arm-left 30s ease-in-out both;
 }
 
 .packman-arm--right {
   right: 2px;
   left: auto;
   transform-origin: right center;
-  animation: packman-arm-right 20s ease-in-out both;
+  animation: packman-arm-right 30s ease-in-out both;
 }
 
 .packman-name {
@@ -1035,7 +1035,7 @@
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.4),
     inset 0 0 0 1px rgba(184, 230, 255, 0.08);
-  animation: packman-game-life 20s ease-in-out both;
+  animation: packman-game-life 30s ease-in-out both;
 }
 
 .packman-game-chrome {
@@ -1051,7 +1051,7 @@
 
 .packman-game-score {
   color: rgba(184, 230, 255, 0.85);
-  animation: packman-score-tick 20s steps(12) both;
+  animation: packman-score-tick 30s steps(12) both;
 }
 
 .packman-maze {
@@ -1107,7 +1107,7 @@
   border-radius: 1px;
   background: #f3e6c8;
   box-shadow: 0 0 4px rgba(243, 230, 200, 0.55);
-  animation: packman-pellet-eat 20s linear both;
+  animation: packman-pellet-eat 30s linear both;
 }
 
 .packman-pellet--0 { left: 14%; top: 18%; animation-delay: 0s; }
@@ -1137,7 +1137,7 @@
   height: 14px;
   border-radius: 50%;
   background: #ffd24a;
-  animation: packman-hero-run 20s linear both;
+  animation: packman-hero-run 30s linear both;
   z-index: 2;
 }
 
@@ -1161,7 +1161,7 @@
   height: 16px;
   border-radius: 7px 7px 2px 2px;
   background: linear-gradient(180deg, #ff5a7a, #c81e45);
-  animation: packman-foe-hunt 20s linear both;
+  animation: packman-foe-hunt 30s linear both;
   z-index: 3;
   box-shadow: 0 0 8px rgba(255, 90, 122, 0.55);
 }
@@ -1208,7 +1208,7 @@
   background: #f3e6c8;
   border-radius: 1px;
   opacity: 0;
-  animation: packman-paper-crumb 20s ease-out both;
+  animation: packman-paper-crumb 30s ease-out both;
 }
 
 .packman-paper-bits i:nth-child(1) { left: 30%; top: 22%; animation-delay: 3s; }
