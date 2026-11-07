@@ -1,8 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import AndresPakstraatAnimation from '../components/AndresPakstraatAnimation'
-import '../components/andres-pakstraat.css'
-import '../components/andres-pakstraat-deluxe.css'
 
 const ROLL_DIAMETER = 1255
 const BASE_CORE_DIAMETER = 230
@@ -41,7 +38,6 @@ function calculateRollsCount(diameter, windsPerRoll, reductionFactor) {
 
 function Inpakstraat() {
   const navigate = useNavigate()
-  const [showIntro, setShowIntro] = useState(true)
   const [diameter, setDiameter] = useState('')
   const [windsPerRoll, setWindsPerRoll] = useState('1.5')
   const [reductionFactor, setReductionFactor] = useState('5')
@@ -61,8 +57,6 @@ function Inpakstraat() {
 
   return (
     <div className="page-shell">
-      {showIntro && <AndresPakstraatAnimation onComplete={() => setShowIntro(false)} />}
-
       <header className="site-header">
         <div className="relative z-10 mx-auto flex max-w-4xl items-center justify-between px-4 py-4 md:px-6">
           <button
